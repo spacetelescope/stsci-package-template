@@ -15,7 +15,7 @@ conf.read(['setup.cfg'])
 
 # Get some config values
 metadata = dict(conf.items('metadata'))
-PACKAGENAME = metadata.get('package_name', 'wfc3tools')
+PACKAGENAME = metadata.get('package_name', 'packagename')
 DESCRIPTION = metadata.get('description', '')
 AUTHOR = metadata.get('author', 'STScI')
 AUTHOR_EMAIL = metadata.get('author_email', 'help@stsci.edu')
@@ -46,7 +46,7 @@ relic.release.write_template(version, PACKAGENAME)
 class PyTest(TestCommand):
     def finalize_options(self):
         TestCommand.finalize_options(self)
-        self.test_args = ['wfc3tools/tests']
+        self.test_args = ['packagename/tests']
         self.test_suite = True
 
     def run_tests(self):
