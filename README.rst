@@ -1,10 +1,5 @@
 Space Telescope Science Institute Package Template
 --------------------------------------------------
-
-[![star this repo](http://githubbadges.com/star.svg?user=spacetelescope&repo=stsci-package-template&style=default&color=fff&background=0C8BF6)](https://github.com/spacetelescope/stsci-package-template)
-
-[![fork this repo](http://githubbadges.com/fork.svg?user=spacetelescope&repo=stsci-package-template&style=default&color=fff&background=0C8BF6)](https://github.com/spacetelescope/stsci-package-template/fork)
-
 (put information here about the goal of this package and who uses it)
 
 This is a standard package template for repositories under the Spacetelescope organization. It includes a SPHINX documentation template that applies the STSCI branding to documentation and can be used to build documentation on ReadTheDocs or locally. 
