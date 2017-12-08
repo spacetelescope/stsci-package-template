@@ -1,8 +1,8 @@
-Space Telescope Science Institute Package Template
---------------------------------------------------
+Space Telescope Science Institute Open Source Package Template
+--------------------------------------------------------------
 (put information here about the goal of this package and who uses it)
 
-This is a standard package template for repositories under the Spacetelescope organization. It includes a SPHINX documentation template that applies the STSCI branding to documentation and can be used to build documentation on ReadTheDocs or locally. 
+This is a standard package template for repositories under the "spacetelescope" organization. It includes a SPHINX documentation template that applies the STSCI branding to documentation and can be used to build documentation on ReadTheDocs or locally. 
 
 This package uses `Relic <https://github.com/jhunkeler/relic>`_ to create the version number. In order for the full build to show the correct version number in the documentation, assign a version tag to your repo, then install the package using "python setup.py install". Now you can go to the docs directory and build the documentation using "make html".
 
