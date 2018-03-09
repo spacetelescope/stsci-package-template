@@ -5,8 +5,8 @@ channels:
 
 dependencies:
     - setuptools
-    - sphinx_rtd_theme
     - numpy
     - python>=3.0
     - pip:
       - sphinx-automodapi
+      - stsci_rtd_theme
