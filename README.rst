@@ -10,6 +10,7 @@ This package uses `Relic <https://github.com/jhunkeler/relic>`_ to create the ve
 Status reports for developers
 -----------------------------
 These are example tags that show the status of this repository for testing and documentation purposes
+You can replace them with the badges for your package when testing, docs, and coverage are up and running.
 
 .. image:: https://travis-ci.org/spacetelescope/stsci-package-template.svg
     :target: https://travis-ci.org/spacetelescope/stsci-package-template
@@ -31,12 +32,12 @@ Give an example of how to install this package
 
 Where to find examples of how to use this package
 -------------------------------------------------
-
+If you choose to build documentation on `Readthedocs <https://readthedocs.org/`_, you should update the .rtd-environment.yml file to include all of your package dependencies. Some basic ones are already included. 
 
 
 Testing Information
 -------------------
-
+The included .travis.yml file is a basic structure to run testing on `Travis-CI <https://docs.travis-ci.com/>`_, replace occurances of "packagename" with the name of your software and add basic tests to the packagename/tests/ directory. There is a very basic example test in place already. 
 
 
 Contributing Code, Documentation, or Feedback
