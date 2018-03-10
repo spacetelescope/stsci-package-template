@@ -45,7 +45,7 @@ matrix:
         # PEP8 check with flake8 (only once, i.e. "os: linux")
         - os: linux
           env: MAIN_CMD='flake8 --count'
-               SETUP_CMD='jwst' TEST_CMD='flake8 --version'
+               SETUP_CMD='packagename' TEST_CMD='flake8 --version'
                CONDA_DEPENDENCIES=$CONDA_DEPENDENCIES
 
         # build sphinx documentation with warnings
@@ -57,7 +57,7 @@ matrix:
     allow_failures:
         # PEP8 will fail for numerous reasons. Ignore it.
         - env: MAIN_CMD='flake8 --count'
-               SETUP_CMD='jwst' TEST_CMD='flake8 --version'
+               SETUP_CMD='packagename' TEST_CMD='flake8 --version'
                CONDA_DEPENDENCIES=$CONDA_DEPENDENCIES
 
 install:
