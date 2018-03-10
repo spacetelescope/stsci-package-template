@@ -32,7 +32,7 @@ Give an example of how to install this package
 
 Where to find examples of how to use this package
 -------------------------------------------------
-If you choose to build documentation on `Readthedocs <https://readthedocs.org/`_, you should update the .rtd-environment.yml file to include all of your package dependencies. Some basic ones are already included. 
+If you choose to build documentation on `Readthedocs <https://readthedocs.org/>`_, you should update the .rtd-environment.yml file to include all of your package dependencies. Some basic ones are already included. 
 
 
 Testing Information
