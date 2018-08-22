@@ -36,7 +36,7 @@ can be done easily using conda or pip::
 
 Once you have cookiecutter installed you can run::
 
-  cookiecutter https://github.com/spacetelescope/stsci-package-template --checkout cookiecutter
+  cookiecutter https://github.com/spacetelescope/stsci-package-template --checkout stsci-cookiecutter
 
 Which will ask you a series of questions to configure your package.
 
