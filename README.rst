@@ -1,16 +1,16 @@
-Astropy package template
+STSCI package template
 ========================
 
 |powered|   -   **cookiecutter branch:** |travis cookiecutter|   -   **master branch:** |travis master| |appveyor master|
 
-This is a package template provided by the Astropy project.
+This is a python package template for STSCI based on the `Astropy Template packge <http://docs.astropy.org/projects/package-template/en/latest/>`_ .
 
 Using this template, packages can make use of the setup, installation, and documentation
-infrastructure developed for the ``astropy`` core and affiliated packages.
+infrastructure developed for the ``astropy`` core and affiliated packages with STScI branding.
 
 For more information, see:
 
-* The `documentation for this package template itself  <http://docs.astropy.org/projects/package-template/en/latest/>`_
+* The `documentation for Astropy package template itself  <http://docs.astropy.org/projects/package-template/en/latest/>`_
 * Astropy `documentation about this template <http://docs.astropy.org/en/latest/development/astropy-package-template.html>`_
 * `The Affiliated Packages section of the Astropy web site <http://affiliated.astropy.org>`_
 * `This template's Github code repository <https://github.com/astropy/package-template>`_
@@ -45,10 +45,9 @@ Manually
 ^^^^^^^^
 
 The ``master`` git branch of this repository contains a version of the
-template populated with placeholders.  This allows the package template to be
-used directly without using cookiecutter, although a number of
-`manual steps  <http://docs.astropy.org/projects/package-template/en/latest/>`_
-are required.  For this reason the cookiecutter approach is recommended.
+template without the cookiecutter hooks and not based on the astropy
+affililated package.  That can also be cloned to create a template
+package. . 
 
 
 
