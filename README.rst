@@ -1,9 +1,9 @@
 STSCI package template
 ========================
 
-|powered|   -   **cookiecutter branch:** |travis cookiecutter|   -   **master branch:** |travis master| |appveyor master|
+|powered|   -   
 
-This is a python package template for STSCI based on the `Astropy Template packge <http://docs.astropy.org/projects/package-template/en/latest/>`_ .
+This is a python package template for STScI based on the `Astropy Template packge <http://docs.astropy.org/projects/package-template/en/latest/>`_ .
 
 Using this template, packages can make use of the setup, installation, and documentation
 infrastructure developed for the ``astropy`` core and affiliated packages with STScI branding.
@@ -36,7 +36,7 @@ can be done easily using conda or pip::
 
 Once you have cookiecutter installed you can run::
 
-  cookiecutter gh:astropy/package-template
+  cookiecutter https://github.com/spacetelescope/stsci-package-template --checkout cookiecutter
 
 Which will ask you a series of questions to configure your package.
 
@@ -66,14 +66,3 @@ For further information on writing templates for cookiecutter see `the cookiecut
     :target: http://www.astropy.org
     :alt: Powered by Astropy Badge
 
-.. |travis cookiecutter| image:: https://travis-ci.org/astropy/package-template.svg?branch=cookiecutter
-    :target: https://travis-ci.org/astropy/package-template
-    :alt: Travis cookiecutter badge
-
-.. |travis master| image:: https://travis-ci.org/astropy/package-template.svg?branch=master
-    :target: https://travis-ci.org/astropy/package-template
-    :alt: Travis master badge
-
-.. |appveyor master| image:: https://ci.appveyor.com/api/projects/status/6p3senmnkk0m43yg/branch/master?svg=true
-    :target: https://ci.appveyor.com/project/Astropy/package-template-615
-    :alt: Appveyor master badge
