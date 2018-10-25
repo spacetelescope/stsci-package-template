@@ -4,9 +4,9 @@ Space Telescope Science Institute Open Source Package Template
 
 This is a standard package template for repositories under the "spacetelescope" organization. It includes a SPHINX documentation template that applies the STSCI branding to documentation and can be used to build documentation on ReadTheDocs or locally. 
 
-This package uses `Relic <https://github.com/jhunkeler/relic>`_ to create the version number. In order for the full build to show the correct version number in the documentation, assign a version tag to your repo, then install the package using "python setup.py install". Now you can go to the docs directory and build the documentation using "make html".
+This package uses [Relic](https://github.com/jhunkeler/relic) to create the version number. In order for the full build to show the correct version number in the documentation, assign a version tag to your repo, then install the package using "python setup.py install". Now you can go to the docs directory and build the documentation using "make html".
 
-** If you are making heavy use of astropy, and would like to use astropy-helpers, use the `stsci-cookiecutter <https://github.com/spacetelescope/stsci-package-template/tree/stsci-cookiecutter>`_  branch on this repository instead. **
+If you are making heavy use of astropy, and would like to use astropy-helpers, use the [stsci-cookiecutter](https://github.com/spacetelescope/stsci-package-template/tree/stsci-cookiecutter) branch on this repository instead. 
 
 
 Status reports for developers
@@ -34,12 +34,12 @@ Give an example of how to install this package
 
 Where to find examples of how to use this package
 -------------------------------------------------
-If you choose to build documentation on `Readthedocs <https://readthedocs.org/>`_, you should update the .rtd-environment.yml file to include all of your package dependencies. Some basic ones are already included. 
+If you choose to build documentation on [Readthedocs](https://readthedocs.org/), you should update the .rtd-environment.yml file to include all of your package dependencies. Some basic ones are already included. 
 
 
 Testing Information
 -------------------
-The included .travis.yml file is a basic structure to run testing on `Travis-CI <https://docs.travis-ci.com/>`_, replace occurances of "packagename" with the name of your software and add basic tests to the packagename/tests/ directory. There is a very basic example test in place already. 
+The included .travis.yml file is a basic structure to run testing on [Travis-CI](https://docs.travis-ci.com/), replace occurances of "packagename" with the name of your software and add basic tests to the packagename/tests/ directory. There is a very basic example test in place already. 
 
 
 Contributing Code, Documentation, or Feedback
