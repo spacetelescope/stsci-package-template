@@ -6,7 +6,7 @@ This is a standard package template for repositories under the "spacetelescope" 
 
 This package uses [Relic](https://github.com/jhunkeler/relic) to create the version number. In order for the full build to show the correct version number in the documentation, assign a version tag to your repo, then install the package using "python setup.py install". Now you can go to the docs directory and build the documentation using "make html".
 
-If you are making heavy use of astropy, and would like to use astropy-helpers, use the [stsci-cookiecutter](https://github.com/spacetelescope/stsci-package-template/tree/stsci-cookiecutter) branch on this repository instead. 
+**If you are making heavy use of astropy, and would like to use astropy-helpers, use the [stsci-cookiecutter](https://github.com/spacetelescope/stsci-package-template/tree/stsci-cookiecutter) branch on this repository instead.**
 
 
 Status reports for developers
@@ -14,17 +14,17 @@ Status reports for developers
 These are example tags that show the status of this repository for testing and documentation purposes
 You can replace them with the badges for your package when testing, docs, and coverage are up and running.
 
-.. image:: https://travis-ci.org/spacetelescope/stsci-package-template.svg
-    :target: https://travis-ci.org/spacetelescope/stsci-package-template
-    :alt: Travis Status
-
-.. image:: https://readthedocs.org/projects/stsci-package-template/badge/?version=latest
-    :target: https://readthedocs.org/projects/stsci-package-template/?badge=latest
-    :alt: Documentation Status
-
-.. image:: https://coveralls.io/repos/github/spacetelescope/stsci-package-template/badge.svg?branch=master
-    :target: https://coveralls.io/github/spacetelescope/stsci-package-template?branch=master
-    :alt: Test Coverage Status
+> .. image:: https://travis-ci.org/spacetelescope/stsci-package-template.svg
+>     :target: https://travis-ci.org/spacetelescope/stsci-package-template
+>     :alt: Travis Status
+>
+> .. image:: https://readthedocs.org/projects/stsci-package-template/badge/?version=latest
+>     :target: https://readthedocs.org/projects/stsci-package-template/?badge=latest
+>     :alt: Documentation Status
+>
+> .. image:: https://coveralls.io/repos/github/spacetelescope/stsci-package-template/badge.svg?branch=master
+>     :target: https://coveralls.io/github/spacetelescope/stsci-package-template?branch=master
+>     :alt: Test Coverage Status
 
 
 Installation
