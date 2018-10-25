@@ -6,6 +6,8 @@ This is a standard package template for repositories under the "spacetelescope" 
 
 This package uses `Relic <https://github.com/jhunkeler/relic>`_ to create the version number. In order for the full build to show the correct version number in the documentation, assign a version tag to your repo, then install the package using "python setup.py install". Now you can go to the docs directory and build the documentation using "make html".
 
+** If you are making heavy use of astropy, and would like to use astropy-helpers, use the `stsci-cookiecutter <https://github.com/spacetelescope/stsci-package-template/tree/stsci-cookiecutter>`_  branch on this repository instead. **
+
 
 Status reports for developers
 -----------------------------
