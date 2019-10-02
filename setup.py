@@ -22,28 +22,6 @@ AUTHOR_EMAIL = metadata.get('author_email', 'help@stsci.edu')
 URL = metadata.get('url', 'https://www.stsci.edu/')
 LICENSE = metadata.get('license', 'BSD')
 
-
-if os.path.exists('relic'):
-    sys.path.insert(1, 'relic')
-    import relic.release
-else:
-    try:
-        import relic.release
-    except ImportError:
-        try:
-            subprocess.check_call(['git', 'clone',
-                                   'https://github.com/jhunkeler/relic.git'])
-            sys.path.insert(1, 'relic')
-            import relic.release
-        except subprocess.CalledProcessError as e:
-            print(e)
-            exit(1)
-
-
-version = relic.release.get_info()
-relic.release.write_template(version, PACKAGENAME)
-
-
 # allows you to build sphinx docs from the pacakge
 # main directory with python setup.py build_sphinx
 
@@ -97,7 +75,7 @@ class PyTest(TestCommand):
 
 setup(
     name=PACKAGENAME,
-    version=version.pep386,
+    use_scm_version=True,
     author=AUTHOR,
     author_email=AUTHOR_EMAIL,
     description=DESCRIPTION,
@@ -110,6 +88,9 @@ setup(
         'Programming Language :: Python',
         'Topic :: Scientific/Engineering :: Astronomy',
         'Topic :: Software Development :: Libraries :: Python Modules',
+    ],
+    setup_requires=[
+        'setuptools_scm',
     ],
     install_requires=[
         'astropy',

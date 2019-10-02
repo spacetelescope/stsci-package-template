@@ -4,7 +4,7 @@ Space Telescope Science Institute Open Source Package Template
 
 This is a standard package template for repositories under the "spacetelescope" organization. It includes a SPHINX documentation template that applies the STSCI branding to documentation and can be used to build documentation on ReadTheDocs or locally. 
 
-This package uses [Relic](https://github.com/jhunkeler/relic) to create the version number. In order for the full build to show the correct version number in the documentation, assign a version tag to your repo, then install the package using "python setup.py install". Now you can go to the docs directory and build the documentation using "make html".
+This package uses [setuptools_scm](https://github.com/pypa/setuptools_scm) to create the version number. In order for the full build to show the correct version number in the documentation, assign a version tag to your repo, then install the package using `pip install .` or `python setup.py install`. Now you can go to the docs directory and build the documentation using "make html".
 
 **If you are making heavy use of astropy, and would like to use astropy-helpers, use the [stsci-cookiecutter](https://github.com/spacetelescope/stsci-package-template/tree/stsci-cookiecutter) branch on this repository instead.**
 

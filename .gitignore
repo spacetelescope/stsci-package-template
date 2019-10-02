@@ -1,8 +1,7 @@
-RELIC-INFO
-relic/
 packagename/version.py
 build/
 dist/
+.eggs/
 *.pyc
 *.o
 *.so
