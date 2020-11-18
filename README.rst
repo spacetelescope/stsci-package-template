@@ -1,7 +1,10 @@
+Important notice
+================
+
+This template is out of date. Use at your own risk!
+
 STSCI package template
 ========================
-
-**Important notice:** This template is out of date. Use at your own risk!
 
 |powered|   -   
 
