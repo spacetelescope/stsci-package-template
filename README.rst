@@ -1,6 +1,8 @@
 STSCI package template
 ========================
 
+**Important notice:** This template is out of date. Use at your own risk!
+
 |powered|   -   
 
 This is a python package template for STScI based on the `Astropy Template packge <http://docs.astropy.org/projects/package-template/en/latest/>`_ .
