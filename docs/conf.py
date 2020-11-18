@@ -68,7 +68,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project
-project = setup_cfg['package_name']
+project = setup_cfg['name']
 author = setup_cfg['author']
 year = datetime.datetime.now().year
 copyright = f'{year}, {author}'
