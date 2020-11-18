@@ -2,7 +2,7 @@
 #
 # This file performs testing using tox and tox.ini to define and configure the test environments.
 
-name: CI Tests
+name: CI
 
 on:
   push:
