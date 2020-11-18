@@ -13,83 +13,47 @@
 # serve to show the default.
 
 import datetime
-import importlib
-import sys
 import os
-import sphinx
-from distutils.version import LooseVersion
-try:
-    from ConfigParser import ConfigParser
-except ImportError:
-    from configparser import ConfigParser
-conf = ConfigParser()
+from configparser import ConfigParser
+from pkg_resources import get_distribution
 
-# If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
-sys.path.insert(0, os.path.abspath('../'))
-sys.path.insert(0, os.path.abspath('packagename/'))
-sys.path.insert(0, os.path.abspath('exts/'))
+import stsci_rtd_theme
+
+
+def setup(app):
+    app.add_stylesheet("stsci.css")
+
 
 # -- General configuration ------------------------------------------------
+conf = ConfigParser()
 conf.read([os.path.join(os.path.dirname(__file__), '..', 'setup.cfg')])
 setup_cfg = dict(conf.items('metadata'))
 
-# If your documentation needs a minimal Sphinx version, state it here.
-needs_sphinx = '1.3'
-
-on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
-
-
-def check_sphinx_version(expected_version):
-    sphinx_version = LooseVersion(sphinx.__version__)
-    expected_version = LooseVersion(expected_version)
-    if sphinx_version < expected_version:
-        raise RuntimeError(
-            "At least Sphinx version {0} is required to build this "
-            "documentation.  Found {1}.".format(
-                expected_version, sphinx_version))
-
 # Configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {
-    'python': ('http://docs.python.org/3/', None),
-    'numpy': ('http://docs.scipy.org/doc/numpy/', None),
-    'scipy': ('http://docs.scipy.org/doc/scipy/reference/', None),
-    'matplotlib': ('http://matplotlib.org/', None),
-    }
+# Uncomment if you cross-ref to API doc from other packages.
+# intersphinx_mapping = {
+#     'python': ('https://docs.python.org/3/',
+#                (None, 'http://data.astropy.org/intersphinx/python3.inv')),
+#     'numpy': ('https://numpy.org/doc/stable/',
+#               (None, 'http://data.astropy.org/intersphinx/numpy.inv')),
+#     'scipy': ('https://docs.scipy.org/doc/scipy/reference/',
+#               (None, 'http://data.astropy.org/intersphinx/scipy.inv')),
+#     'matplotlib': ('https://matplotlib.org/',
+#                    (None, 'http://data.astropy.org/intersphinx/matplotlib.inv')),  # noqa
+#     'astropy': ('https://docs.astropy.org/en/stable/', None)}
 
-if sys.version_info[0] == 2:
-    intersphinx_mapping['python'] = ('http://docs.python.org/2/', None)
-    intersphinx_mapping['pythonloc'] = (
-        'http://docs.python.org/',
-        os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                     'local/python2_local_links.inv')))
-
-# Add any Sphinx extension module names here, as strings. They can be
-# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
-# ones.
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'numfig',
     'sphinx.ext.autodoc',
     'sphinx.ext.intersphinx',
     'sphinx.ext.todo',
     'sphinx.ext.inheritance_diagram',
     'sphinx.ext.viewcode',
-    'sphinx.ext.autosummary',
-    ]
-
-
-if on_rtd:
-    extensions.append('sphinx.ext.mathjax')
-
-elif LooseVersion(sphinx.__version__) < LooseVersion('1.4'):
-    extensions.append('sphinx.ext.pngmath')
-else:
-    extensions.append('sphinx.ext.imgmath')
-
+    'sphinx.ext.napoleon',
+    'sphinx_automodapi.automodapi',
+    'sphinx.ext.mathjax']
 
 # Add any paths that contain templates here, relative to this directory.
 # templates_path = ['_templates']
@@ -103,28 +67,20 @@ source_suffix = '.rst'
 # The master toctree document.
 master_doc = 'index'
 
-# A list of warning types to suppress arbitrary warning messages. We mean to
-# override directives in astropy_helpers.sphinx.ext.autodoc_enhancements,
-# thus need to ignore those warning. This can be removed once the patch gets
-# released in upstream Sphinx (https://github.com/sphinx-doc/sphinx/pull/1843).
-# Suppress the warnings requires Sphinx v1.4.2
-suppress_warnings = ['app.add_directive', ]
-
-
 # General information about the project
 project = setup_cfg['package_name']
 author = setup_cfg['author']
-copyright = '{0}, {1}'.format(datetime.datetime.now().year, author)
+year = datetime.datetime.now().year
+copyright = f'{year}, {author}'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
 # build documents.
 #
-# The short X.Y version.
-package = importlib.import_module(setup_cfg['package_name'])
-version = package.__version__.split('-', 1)[0]
 # The full version, including alpha/beta/rc tags.
-release = package.__version__
+release = get_distribution(project).version
+# The short X.Y version.
+version = '.'.join(release.split('.')[:2])
 
 # The language for content autogenerated by Sphinx. Refer to documentation
 # for a list of supported languages.
@@ -143,7 +99,6 @@ exclude_patterns = ['_build']
 # The reST default role (used for this markup: `text`) to use for all
 # documents.
 default_role = 'obj'
-
 
 # Don't show summaries of the members in each class along with the
 # class' docstring
@@ -168,7 +123,6 @@ graphviz_dot_args = [
     '-Gfontsize=10',
     '-Gfontname=Helvetica Neue, Helvetica, Arial, sans-serif'
 ]
-
 
 # If true, '()' will be appended to :func: etc. cross-reference text.
 # add_function_parentheses = True
@@ -195,23 +149,8 @@ pygments_style = 'sphinx'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'sphinx_rtd_theme'
-
-# Theme options are theme-specific and customize the look and feel of a theme
-# further.  For a list of options available for each theme, see the
-# documentation.
-html_theme_options = {
-    "collapse_navigation": True
-    }
-#        "nosidebar": "false",
-#        "sidebarbgcolor": "#4db8ff",
-#        "sidebartextcolor": "black",
-#        "sidebarlinkcolor": "black",
-#        "headbgcolor": "white",
-#        }
-
-# Add any paths that contain custom themes here, relative to this directory.
-html_theme_path = ['_static/']
+html_theme = 'stsci_rtd_theme'
+html_theme_path = [stsci_rtd_theme.get_html_theme_path()]
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
@@ -220,25 +159,10 @@ html_theme_path = ['_static/']
 # A shorter title for the navigation bar.  Default is the same as html_title.
 # html_short_title = None
 
-# The name of an image file (relative to this directory) to place at the top
-# of the sidebar.
-html_logo = '_static/stsci_pri_combo_mark_white.png'
-
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
 # html_favicon = None
-
-# Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
-html_context = {
-    'css_files': [
-        '_static/css/custom.css',
-    ],
-}
-
 
 # Add any extra paths that contain custom files (such as robots.txt or
 # .htaccess) here, relative to this directory. These files are copied
@@ -287,8 +211,7 @@ html_use_index = True
 # html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'packagenamedoc'
-
+htmlhelp_basename = f'{project}doc'
 
 # -- Options for LaTeX output ---------------------------------------------
 
@@ -305,13 +228,12 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  ('index', 'packagename.tex', u'Packagename Documentation',
-   u'packagename', 'manual'),
+  ('index', f'{project}.tex', f'{project} Documentation',
+   f'{project}', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
 # the title page.
-latex_logo = '_static/stsci_pri_combo_mark_white.png'
 
 # For "manual" documents, if this is true, then toplevel headings are parts,
 # not chapters.
@@ -329,19 +251,17 @@ latex_show_urls = 'True'
 # If false, no module index is generated.
 latex_domain_indices = True
 
-
 # -- Options for manual page output ---------------------------------------
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'packagename', u'Packagename Documentation',
-     [u'packagename'], 1)
+    ('index', f'{project}', f'{project} Documentation',
+     [f'{project}'], 1)
 ]
 
 # If true, show URL addresses after external links.
 man_show_urls = True
-
 
 # -- Options for Texinfo output -------------------------------------------
 
@@ -349,8 +269,8 @@ man_show_urls = True
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'packagename', u'Packagename Documentation',
-   u'packagename', 'packagename', 'Packagname',
+  ('index', f'{project}', f'{project} Documentation',
+   f'{author}', f'{project}', f'{project}',
    'Miscellaneous'),
 ]
 
@@ -366,14 +286,13 @@ texinfo_show_urls = 'inline'
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 # texinfo_no_detailmenu = False
 
-
 # -- Options for Epub output ----------------------------------------------
 
 # Bibliographic Dublin Core info.
-epub_title = u'Packagename'
-epub_author = u'Author Name, STSCI'
-epub_publisher = u'STSCI'
-epub_copyright = u'2016 STScI'
+epub_title = f'{project}'
+epub_author = f'{author}'
+epub_publisher = f'{author}'
+epub_copyright = f'{year} {author}'
 
 # The basename for the epub file. It defaults to the project name.
 # epub_basename = u'wfc3tools'

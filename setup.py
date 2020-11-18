@@ -1,82 +1,37 @@
 #!/usr/bin/env python
-import os
-import subprocess
+# Licensed under a 3-clause BSD style license - see LICENSE.rst
+
 import sys
-from setuptools import setup, find_packages
-from setuptools.command.test import test as TestCommand
+from setuptools import setup
 
-try:
-    from distutils.config import ConfigParser
-except ImportError:
-    from configparser import ConfigParser
+TEST_HELP = """
+Note: running tests is no longer done using 'python setup.py test'. Instead
+you will need to run:
 
-conf = ConfigParser()
-conf.read(['setup.cfg'])
+    pip install -e .
+    pytest
 
-# Get some config values
-metadata = dict(conf.items('metadata'))
-PACKAGENAME = metadata.get('package_name', 'packagename')
-DESCRIPTION = metadata.get('description', '')
-AUTHOR = metadata.get('author', 'STScI')
-AUTHOR_EMAIL = metadata.get('author_email', 'help@stsci.edu')
-URL = metadata.get('url', 'https://www.stsci.edu/')
-LICENSE = metadata.get('licesnce', 'BSD')
+"""
 
-if os.path.exists('relic'):
-    sys.path.insert(1, 'relic')
-    import relic.release
-else:
-    try:
-        import relic.release
-    except ImportError:
-        try:
-            subprocess.check_call(['git', 'clone',
-                                   'https://github.com/jhunkeler/relic.git'])
-            sys.path.insert(1, 'relic')
-            import relic.release
-        except subprocess.CalledProcessError as e:
-            print(e)
-            exit(1)
+if 'test' in sys.argv:
+    print(TEST_HELP)
+    sys.exit(1)
 
+DOCS_HELP = """
+Note: building the documentation is no longer done using
+'python setup.py build_docs'. Instead you will need to run:
 
-version = relic.release.get_info()
-relic.release.write_template(version, PACKAGENAME)
+    cd docs
+    make html
 
+"""
 
-class PyTest(TestCommand):
-    def finalize_options(self):
-        TestCommand.finalize_options(self)
-        self.test_args = ['packagename/tests']
-        self.test_suite = True
+if 'build_docs' in sys.argv or 'build_sphinx' in sys.argv:
+    print(DOCS_HELP)
+    sys.exit(1)
 
-    def run_tests(self):
-        # import here, cause outside the eggs aren't loaded
-        import pytest
-        errno = pytest.main(self.test_args)
-        sys.exit(errno)
+# Note that requires and provides should not be included in the call to
+# ``setup``, since these are now deprecated. See this link for more details:
+# https://groups.google.com/forum/#!topic/astropy-dev/urYO8ckB2uM
 
-
-setup(
-    name=PACKAGENAME,
-    version=version.pep386,
-    author=AUTHOR,
-    author_email=AUTHOR_EMAIL,
-    description=DESCRIPTION,
-    license=LICENSE,
-    url=URL,
-    classifiers=[
-        'Intended Audience :: Science/Research',
-        'License :: OSI Approved :: BSD License',
-        'Operating System :: OS Independent',
-        'Programming Language :: Python',
-        'Topic :: Scientific/Engineering :: Astronomy',
-        'Topic :: Software Development :: Libraries :: Python Modules',
-    ],
-    install_requires=[
-        'astropy',
-    ],
-    tests_require=['pytest'],
-    packages=find_packages(),
-    package_data={PACKAGENAME: ['pars/*']},
-    cmdclass = {'test': PyTest}
-)
+setup(use_scm_version={'write_to': 'packagename/version.py'})
