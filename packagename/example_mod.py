@@ -43,7 +43,7 @@ def primes(imax):
             p[k] = n
             k = k + 1
             result.append(n)
-            if k > 10000:
+            if k > 10000:  # pragma: no cover
                 break
         n = n + 1
 
