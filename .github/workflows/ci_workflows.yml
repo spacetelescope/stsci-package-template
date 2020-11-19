@@ -35,7 +35,7 @@ jobs:
           - name: Python 3.9 with coverage checking
             os: ubuntu-latest
             python: 3.9
-            toxenv: py38-test-cov
+            toxenv: py39-test-cov
 
           - name: OS X - Python 3.8
             os: macos-latest
