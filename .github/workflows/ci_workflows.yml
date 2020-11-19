@@ -27,6 +27,16 @@ jobs:
             python: 3.x
             toxenv: codestyle
 
+          - name: PEP 517
+            os: ubuntu-latest
+            python: 3.x
+            toxenv: pep517
+
+          - name: Security audit
+            os: ubuntu-latest
+            python: 3.x
+            toxenv: securityaudit
+
           - name: Python 3.7 with oldest supported dependencies
             os: ubuntu-latest
             python: 3.7
