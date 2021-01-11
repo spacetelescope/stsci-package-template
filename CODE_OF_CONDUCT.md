@@ -50,5 +50,5 @@ associated social events, and one-to-one interactions.
 Parts of this code of conduct have been adapted from the Astropy and NumFOCUS
 codes of conduct:
 
-- http://www.astropy.org/code_of_conduct.html
+- https://www.astropy.org/code_of_conduct.html
 - https://www.numfocus.org/about/code-of-conduct/
