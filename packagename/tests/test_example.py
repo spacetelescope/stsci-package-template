@@ -18,7 +18,7 @@ def test_no_cython():
 
 
 def test_cli(capsys):
-    main(args=['-tp', '2'])
+    main(args=["-tp", "2"])
     captured = capsys.readouterr()
-    assert captured.out.startswith('Found 2 prime numbers')
+    assert captured.out.startswith("Found 2 prime numbers")
     assert len(captured.err) == 0

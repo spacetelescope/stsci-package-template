@@ -1,0 +1,6 @@
+# this file only exists for legacy compatibility with editors that expect it
+# you should use `ruff` for linting and formatting, and not `flake8`
+
+[flake8]
+max-line-length = 79
+
