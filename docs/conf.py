@@ -19,15 +19,19 @@ from pkg_resources import get_distribution
 
 import stsci_rtd_theme
 
+if sys.version_info < (3, 11):
+    import tomli as tomllib
+else:
+    import tomllib
+
 
 def setup(app):
     app.add_css_file("stsci.css")
 
 
 # -- General configuration ------------------------------------------------
-conf = ConfigParser()
-conf.read([os.path.join(os.path.dirname(__file__), '..', 'setup.cfg')])
-setup_cfg = dict(conf.items('metadata'))
+with open(Path(__file__).parent.parent / "pyproject.toml", "rb") as configuration_file:
+metadata = conf['metadata']
 
 # Configuration for intersphinx: refer to the Python standard library.
 # Uncomment if you cross-ref to API doc from other packages.
@@ -68,8 +72,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project
-project = setup_cfg['name']
-author = setup_cfg['author']
+project = metadata['project']['name']
+author = metadata['project']['authors'][0]['name']
 year = datetime.datetime.now().year
 copyright = f'{year}, {author}'
 
