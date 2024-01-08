@@ -1,4 +1,4 @@
-__all__ = ['primes', 'do_primes']
+__all__ = ["primes", "do_primes"]
 
 
 def primes(imax):
@@ -84,7 +84,8 @@ def do_primes(n, usecython=False):
     """
     if usecython:
         raise NotImplementedError(
-            "This template does not have the example C code included.")
+            "This template does not have the example C code included."
+        )
     else:
         # Using pure python primes
         return primes(n)
@@ -95,15 +96,31 @@ def main(args=None):
     import argparse
     from time import time
 
-    parser = argparse.ArgumentParser(description='Process some integers.')
-    parser.add_argument('-c', '--use-cython', dest='cy', action='store_true',
-                        help='Use the Cython-based Prime number generator.')
-    parser.add_argument('-t', '--timing', dest='time', action='store_true',
-                        help='Time the Prime number generator.')
-    parser.add_argument('-p', '--print', dest='prnt', action='store_true',
-                        help='Print all of the Prime numbers.')
-    parser.add_argument('n', metavar='N', type=int,
-                        help='Get Prime numbers up to this number.')
+    parser = argparse.ArgumentParser(description="Process some integers.")
+    parser.add_argument(
+        "-c",
+        "--use-cython",
+        dest="cy",
+        action="store_true",
+        help="Use the Cython-based Prime number generator.",
+    )
+    parser.add_argument(
+        "-t",
+        "--timing",
+        dest="time",
+        action="store_true",
+        help="Time the Prime number generator.",
+    )
+    parser.add_argument(
+        "-p",
+        "--print",
+        dest="prnt",
+        action="store_true",
+        help="Print all of the Prime numbers.",
+    )
+    parser.add_argument(
+        "n", metavar="N", type=int, help="Get Prime numbers up to this number."
+    )
 
     res = parser.parse_args(args)
 
@@ -111,11 +128,11 @@ def main(args=None):
     primes = do_primes(res.n, usecython=res.cy)
     post = time()
 
-    print(f'Found {len(primes)} prime numbers')
-    print(f'Largest prime: {primes[-1]}')
+    print(f"Found {len(primes)} prime numbers")
+    print(f"Largest prime: {primes[-1]}")
 
     if res.time:
-        print(f'Running time: {post - pre} s')
+        print(f"Running time: {post - pre} s")
 
     if res.prnt:
-        print(f'Primes: {primes}')
+        print(f"Primes: {primes}")
