@@ -3,7 +3,7 @@
 try:
     from .version import version as __version__
 except ImportError:
-    __version__ = ''
+    __version__ = ""
 
 # Expose subpackage API at package level.
 from .example_mod import *  # noqa
