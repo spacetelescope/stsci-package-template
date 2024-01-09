@@ -1,0 +1,33 @@
+name: build
+
+on:
+  pull_request:
+  release:
+    types:
+      - released
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    uses: OpenAstronomy/github-actions-workflows/.github/workflows/publish_pure_python.yml@v2
+    with:
+      upload_to_pypi: ${{ (github.event_name == 'release') && (github.event.action == 'released') }}
+    secrets:
+      pypi_token: ${{ secrets.PYPI_PASSWORD_STSCI_MAINTAINER }}
+
+    # use the following block instead if your Python package has C extensions
+
+    # uses: OpenAstronomy/github-actions-workflows/.github/workflows/publish.yml@v2
+    # with:
+    #   targets: |
+    #     - cp3*-manylinux_x86_64
+    #     - cp3*-macosx_x86_64
+    #     - cp3*-macosx_arm64
+    #   sdist: true
+    #   upload_to_pypi: ${{ (github.event_name == 'release') && (github.event.action == 'released') }}
+    # secrets:
+    #    pypi_token: ${{ secrets.PYPI_PASSWORD_STSCI_MAINTAINER }}

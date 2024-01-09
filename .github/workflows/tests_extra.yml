@@ -1,0 +1,38 @@
+name: extra tests
+
+on:
+  schedule:
+    # 6am UTC on Mondays
+    - cron: '0 6 * * 1'
+  pull_request:
+    branches:
+      - main
+    types:
+      - synchronize
+      - labeled
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    # only run tests if scheduled, started from a pull request with the `run extra tests` label, or started manually
+    if: github.event_name == 'schedule' || contains(github.event.pull_request.labels.*.name, 'run extra tests') || github.event_name == 'workflow_dispatch' 
+    uses: OpenAstronomy/github-actions-workflows/.github/workflows/tox.yml@v1
+    with:
+      # run reproducible test environments defined in `tox.ini`
+      envs: |
+        - linux: check-docs-links
+          python-version: '3.13'
+        - macos: py311-oldestdeps-xdist
+        - macos: py311-xdist
+        - macos: py312-xdist
+        - macos: py313-cov-xdist
+        - macos: py3-xdist
+          pytest-results-summary: true
+        - linux: py3-devdeps-xdist
+          pytest-results-summary: true
+        - macos: py3-devdeps-xdist
+          pytest-results-summary: true
