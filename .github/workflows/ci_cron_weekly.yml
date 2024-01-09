@@ -1,29 +1,19 @@
-# GitHub Actions workflow that runs on a cron schedule.
+# this workflow uses Tox to configure and run reproducible test environments (defined in `tox.ini`)
+name: tests_scheduled
 
-name: Cron Scheduled CI Tests
-
+# events that trigger this workflow to run
 on:
   schedule:
     # run at 9am UTC on Mondays
     - cron: '0 9 * * 1'
 
+# these jobs use the OpenAstronomy reusable Tox workflow, which runs Tox envs
 jobs:
-  # Testing links in documents is a good example of something to run on a schedule
-  # to catch links that stop working for some reason.
-  # The if statement is to prevent cron from running on forks.
-  linkcheck:
-    runs-on: ubuntu-latest
-    if: github.repository == 'spacetelescope/stsci-package-template'
-    steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python to build docs with sphinx
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.8
-    - name: Install base dependencies
-      run: |
-        python -m pip install --upgrade pip
-        python -m pip install tox
-    - name: Check links in docs using tox
-      run: |
-        tox -e linkcheck
+  # run check toxenvs
+  check:
+    uses: OpenAstronomy/github-actions-workflows/.github/workflows/tox.yml@v1
+    with:
+      default_python: "3.12"
+      envs: |
+        # Testing links in the documentation is a good example of something to run on a schedule to catch links that stop working for some reason.
+        - linux: check-docs-links
