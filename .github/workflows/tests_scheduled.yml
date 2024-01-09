@@ -1,0 +1,24 @@
+# this workflow uses Tox to configure and run reproducible test environments (defined in `tox.ini`)
+name: tests_scheduled
+
+# events that trigger this workflow to run
+on:
+  schedule:
+    # run at 9am UTC on Mondays
+    - cron: '0 9 * * 1'
+
+# only allow one instance of this workflow to run per commit or ref; cancel in-progress ones
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# these jobs use the OpenAstronomy reusable Tox workflow, which runs Tox envs
+jobs:
+  # run check toxenvs
+  check:
+    uses: OpenAstronomy/github-actions-workflows/.github/workflows/tox.yml@v1
+    with:
+      default_python: "3.12"
+      envs: |
+        # Testing links in the documentation is a good example of something to run on a schedule to catch links that stop working for some reason.
+        - linux: check-docs-links

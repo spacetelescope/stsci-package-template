@@ -1,0 +1,41 @@
+# this workflow builds the package and, only when triggered by a release, publishes it to PyPI
+name: build
+
+# events that trigger this workflow to run
+on:
+  release:
+    types: [ released ]
+  pull_request:
+  workflow_dispatch:
+
+# only allow one instance of this workflow to run per commit or ref; cancel in-progress ones
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# these jobs use the OpenAstronomy reusable build / publish workflow
+jobs:
+  build:
+    uses: OpenAstronomy/github-actions-workflows/.github/workflows/publish_pure_python.yml@v1
+    with:
+      # only upload wheels to PyPI if the triggering event was a release
+      upload_to_pypi: ${{ (github.event_name == 'release') && (github.event.action == 'released') }}
+    secrets:
+      pypi_token: ${{ secrets.PYPI_PASSWORD_STSCI_MAINTAINER }}
+
+  # use the following block instead if your Python package uses C extensions
+
+  #  uses: OpenAstronomy/github-actions-workflows/.github/workflows/publish.yml@v1
+  #  with:
+  #    # only upload wheels to PyPI if the triggering event was a release
+  #    upload_to_pypi: ${{ (github.event_name == 'release') && (github.event.action == 'released') }}
+  #    targets: |
+  #      # Linux wheels
+  #      - cp3*-manylinux_x86_64
+  #      # MacOS wheels
+  #      - cp3*-macosx_x86_64
+  #      # Until we have arm64 runners, we can't automatically test arm64 wheels
+  #      - cp3*-macosx_arm64
+  #    sdist: true
+  #  secrets:
+  #    pypi_token: ${{ secrets.PYPI_PASSWORD_STSCI_MAINTAINER }}

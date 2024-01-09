@@ -1,0 +1,42 @@
+# this workflow uses Tox to configure and run reproducible test environments (defined in `tox.ini`)
+name: tests
+
+# events that trigger this workflow to run
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+# only allow one instance of this workflow to run per commit or ref; cancel in-progress ones
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+  
+# these jobs use the OpenAstronomy reusable Tox workflow, which runs Tox envs
+jobs:
+  # run check toxenvs
+  check:
+    uses: OpenAstronomy/github-actions-workflows/.github/workflows/tox.yml@v1
+    with:
+      default_python: "3.12"
+      envs: |
+        - linux: check-style
+        - linux: check-security
+  # run test toxenvs
+  test:
+    uses: OpenAstronomy/github-actions-workflows/.github/workflows/tox.yml@v1
+    with:
+      envs: |
+        - linux: py39-oldestdeps-cov-parallel
+          pytest-results-summary: true
+        - linux: py39-parallel
+        - linux: py310-parallel
+        - linux: py311-parallel
+          pytest-results-summary: true
+        - macos: py311-parallel
+          pytest-results-summary: true
+        - linux: py311-cov-parallel
+          coverage: codecov
+          pytest-results-summary: true
+        - linux: py312-parallel
