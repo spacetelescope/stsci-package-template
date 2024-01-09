@@ -19,6 +19,7 @@ jobs:
   ci_tests:
     name: ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.allow_failure}}
     strategy:
       matrix:
         include:
@@ -26,41 +27,49 @@ jobs:
             os: ubuntu-latest
             python: 3.x
             toxenv: codestyle
+            allow_failure: false
 
           - name: PEP 517
             os: ubuntu-latest
             python: 3.x
             toxenv: pep517
+            allow_failure: false
 
           - name: Security audit
             os: ubuntu-latest
             python: 3.x
             toxenv: securityaudit
+            allow_failure: false
 
           - name: Python 3.7 with oldest supported dependencies
             os: ubuntu-latest
             python: 3.7
             toxenv: py37-test-oldestdeps
+            allow_failure: false
 
           - name: Python 3.9 with coverage checking
             os: ubuntu-latest
             python: 3.9
             toxenv: py39-test-cov
+            allow_failure: false
 
           - name: OS X - Python 3.8
             os: macos-latest
             python: 3.8
             toxenv: py38-test
+            allow_failure: false
 
           - name: Windows - Python 3.8
             os: windows-latest
             python: 3.8
             toxenv: py38-test
+            allow_failure: false
 
           - name: Python 3.9 with latest dev versions of key dependencies
             os: ubuntu-latest
             python: 3.9
             toxenv: py39-test-devdeps
+            allow_failure: false
 
     steps:
     - name: Checkout code
