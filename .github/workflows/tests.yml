@@ -8,6 +8,11 @@ on:
       - main
   pull_request:
 
+# only allow one instance of this workflow to run per commit or ref; cancel in-progress ones
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+  
 # these jobs use the OpenAstronomy reusable Tox workflow, which runs Tox envs
 jobs:
   # run check toxenvs
