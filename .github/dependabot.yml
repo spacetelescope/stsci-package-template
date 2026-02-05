@@ -1,0 +1,17 @@
+version: 2
+
+updates:
+  - package-ecosystem: "github-actions"
+    directory: ".github/workflows/"
+    target-branch: "main"
+    labels:
+      - automation
+      - dependencies
+    groups:
+      actions:
+        patterns:
+          - "*"
+    schedule:
+      interval: "monthly"
+    cooldown:
+      default-days: 7
