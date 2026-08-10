@@ -84,11 +84,12 @@ Defaults to ``>=3.12`` for "Python 3.12 and above".
 ``python_c_extensions``
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-Whether to build C extensions with ``setuptools``.
-You will need to manually enter extension configuration in ``setup.py``.
+Whether to build C extensions.
 
 .. caution::
-	This option is currently only available with the ``setuptools`` build backend (see below).
+	This option is currently only automatically available with the ``setuptools`` build backend (see below);
+	You will need to manually enter extension configuration in ``setup.py``.
+	To build C extensions with `hatchling` you will need to manually set up the Hatch project manager with the `hatch-cython` plugin.
 
 ``python_build_backend``
 ^^^^^^^^^^^^^^^^^^^^^^^^
