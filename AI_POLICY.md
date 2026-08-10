@@ -3,7 +3,7 @@
 STScI software maintainers welcome contributions, including those developed with the assistance of generative AI tools. However, the use of such tools does not change our expectations for contributor responsibility, engagement, or code quality. The following statements apply to all contributions. Pull requests that violate this policy will be closed.
 
 1. Prohibited Tools
-   1. Per STScI's AI policy, certain tools are prohibited and may not be used. This currently includes, but may not be limited to, Deepseek and Grammerly.
+   1. Per STScI's AI policy, certain tools are prohibited and may not be used. This currently includes, but may not be limited to, Deepseek and Grammarly.
 2. Human ownership and accountability
    1. Contributors are responsible for all submitted content, regardless of whether generative AI tools were used.
    2. Contributors must understand and be able to explain all changes during review and address any concerns raised by maintainers.
