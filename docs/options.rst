@@ -88,14 +88,14 @@ Whether to build C extensions with ``setuptools``.
 You will need to manually enter extension configuration in ``setup.py``.
 
 .. caution::
-	This option is currently only available with the ``setuptools`` build backend (see below). 
+	This option is currently only available with the ``setuptools`` build backend (see below).
 
 ``python_build_backend``
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 `Build backend to use <https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#declaring-the-build-backend>`_
 when building the package.
-This can either be ``setuptools`` or ``hatchling``. 
+This can either be ``setuptools`` or ``hatchling``.
 
 ``crds_observatory``
 ^^^^^^^^^^^^^^^^^^^^
@@ -103,4 +103,3 @@ This can either be ``setuptools`` or ``hatchling``.
 Whether to set up CRDS caching in the test workflow;
 either ``none``, ``roman``, ``jwst``, or ``hst``.
 Default to ``none``.
-

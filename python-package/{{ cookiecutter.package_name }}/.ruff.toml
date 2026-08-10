@@ -38,3 +38,18 @@ select = [
   "RUF",  # Ruff-specific rules
   "TRY",  # tryceratops
 ]
+ignore = [
+  "D100",  # Missing docstring in public module
+  "D104",  # Missing docstring in public package
+  "D203",  # incorrect-blank-line-before-class
+  "D212",  # multi-line-summary-first-line
+]
+
+[lint.per-file-ignores]
+"noxfile.py" = [
+  "D103",  # Missing docstring in public function
+]
+"tests/*" = [
+  "D103",  # Missing docstring in public function
+  "S101",  # Use of `assert` detected
+]

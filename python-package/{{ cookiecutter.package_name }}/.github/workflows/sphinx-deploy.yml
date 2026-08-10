@@ -36,11 +36,10 @@ jobs:
       pages: write
       id-token: write
     environment:
-      name: github-pages      
+      name: github-pages
       url: ${{ "{{" }} steps.deployment.outputs.page_url {{ "}}" }}
     steps:
       - uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5.0.0
         id: deployment
         with:
           preview: ${{ "{{" }} github.even_name == 'pull_request' {{ "}}" }}
-

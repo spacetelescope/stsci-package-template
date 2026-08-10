@@ -69,7 +69,7 @@ jobs:
           --body='[Cruft](https://cruft.github.io/cruft/) has detected updates to the upstream Cookiecutter template https://github.com/spacetelescope/stsci-package-template
 
           Please manually review any new `*.rej` files (changes that failed to apply automatically).
-          
+
           > [!TIP]
           > To skip these updates, modify `${{ steps.branch.outputs.name }}` to only increment `.cruft.json`.'
 {%- endraw %}

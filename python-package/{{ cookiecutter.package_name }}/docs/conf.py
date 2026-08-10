@@ -11,12 +11,16 @@ from pathlib import Path
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-with open(Path(__file__).parent.parent / "pyproject.toml", "rb") as metadata_file:
+with Path.open(Path(__file__).parent.parent / "pyproject.toml", "rb") as metadata_file:
     metadata = tomllib.load(metadata_file)["project"]
 
 project = metadata["name"]
 author = "Space Telescope Science Institute (`STScI <https://stsci.edu>`_)"
-copyright = f"{datetime.datetime.today().year}, Association of Universities for Research in Astronomy (`AURA <https://www.aura-astronomy.org>`_)"
+copyright = (
+    f"{datetime.datetime.now(tz=datetime.UTC).year}, "
+    "Association of Universities for Research in Astronomy "
+    "(`AURA <https://www.aura-astronomy.org>`_)"
+)
 
 package = importlib.import_module(metadata["name"])
 try:

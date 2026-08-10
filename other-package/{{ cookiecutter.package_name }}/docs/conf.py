@@ -10,7 +10,11 @@ import datetime
 
 project = "{{ cookiecutter.project_name }}"
 author = "Space Telescope Science Institute (`STScI <https://stsci.edu>`_)"
-copyright = f"{datetime.datetime.today().year}, Association of Universities for Research in Astronomy (`AURA <https://www.aura-astronomy.org>`_)"
+copyright = (
+    f"{datetime.datetime.now(tz=datetime.UTC).year}, "
+    "Association of Universities for Research in Astronomy"
+    "(`AURA <https://www.aura-astronomy.org>`_)"
+)
 
 version = "dev"
 release = "dev"
