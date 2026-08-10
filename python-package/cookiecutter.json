@@ -31,7 +31,9 @@
     },
     "python_version": "Python version requirements",
     "python_build_backend": {
-      "__prompt__": "backend to build package with"
+      "__prompt__": "backend to build package with",
+      "setuptools": "setuptools (https://setuptools.pypa.io); mature, can build C extensions with `setup.py`",
+      "hatchling": "hatchling (https://hatch.pypa.io); modern, part of the Hatch project manager (but can be used standalone), can build C extensions with the `hatch-cython` plugin"
     },
     "python_c_extensions": "build C extensions?",
     "crds_observatory": {
