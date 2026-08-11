@@ -5,17 +5,21 @@
 # STScI Package Template
 
 This [Cookiecutter template](https://github.com/cookiecutter/cookiecutter)
-defines best practices and boilerplate for STScI packages:
+defines best practices and boilerplate for STScI packages.
 
-```shell
-cookiecutter https://github.com/spacetelescope/stsci-package-template.git --directory python-package
-```
-
-To keep your package updated with changes to this template,
-use [Cruft](https://cruft.github.io/cruft) instead of Cookiecutter:
+To generate files for a package, install [Cruft](https://cruft.github.io/cruft)
+and run the following, and answer the prompts:
 
 ```shell
 cruft create https://github.com/spacetelescope/stsci-package-template.git --directory python-package
+```
+
+Then, `cd` to the newly-created directory and initialize version control:
+
+```shell
+cd my_package/
+git init
+git commit -am "cookiecutter'd files"
 ```
 
 This template [includes a GitHub Actions workflow](/templates/.github/workflows/update.yml) that
