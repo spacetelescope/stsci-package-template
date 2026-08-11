@@ -2,7 +2,7 @@
   "project_name": null,
   "package_name": "{{ cookiecutter.project_name.lower().replace(' ', '_').replace('-', '_').replace(\"'\", '') }}",
   "repository_url": "https://github.com/spacetelescope/{{ cookiecutter.package_name }}",
-  "git_username": "<USERNAME>",
+  "git_username": null,
   "project_description": null,
   "manage_changelog_with_towncrier": false,
   "publish_docs_to": ["none", "readthedocs.io", "github.io"],
