@@ -46,9 +46,11 @@ ignore = [
 ]
 
 [lint.per-file-ignores]
+{%- if cookiecutter.task_runner %}
 "noxfile.py" = [
   "D103",  # Missing docstring in public function
 ]
+{%- endif %}
 "tests/*" = [
   "D103",  # Missing docstring in public function
   "S101",  # Use of `assert` detected
