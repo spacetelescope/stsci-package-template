@@ -1,0 +1,1 @@
+total rewrite as Cookiecutter template with Cruft synchronization
