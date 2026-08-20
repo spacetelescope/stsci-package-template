@@ -21,9 +21,7 @@ This change ...
       Otherwise, add the `no-changelog-entry-needed` label.
 {%- endif %}
 
-## Generative AI Disclosure
+## Generative AI Usage Disclosure
 
-Were any generative AI or agentic LLMs used in the process of making this change?
-
-- [ ] yes
-- [ ] no
+<!-- If generative AI or LLMs were used in the process of making this change, describe their use here. -->
+<!-- Otherwise, indicate "No genAI tools used". -->
