@@ -3,16 +3,6 @@ breaking-change:
   - changed-files:
       - any-glob-to-any-file:
           - "changes/*.breaking.rst"
-
-feature:
-  - changed-files:
-      - any-glob-to-any-file:
-          - "changes/*.feature.rst"
-
-fix:
-  - changed-files:
-      - any-glob-to-any-file:
-          - "changes/*.fix.rst"
 {% endif %}
 documentation:
   - changed-files:
