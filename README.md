@@ -7,14 +7,14 @@
 This [Cookiecutter template](https://github.com/cookiecutter/cookiecutter)
 defines best practices and boilerplate for STScI packages.
 
-To generate files for a package, install [Cruft](https://cruft.github.io/cruft)
-and run the following, and answer the prompts:
+To generate files for a package, install [Cruft](https://cruft.github.io/cruft),
+run the following, and answer the prompts:
 
 ```shell
 cruft create https://github.com/spacetelescope/stsci-package-template.git --directory python-package
 ```
 
-Then, `cd` to the newly-created directory and initialize version control:
+Then, `cd` to the newly-generated package directory and initialize version control:
 
 ```shell
 cd my_package/
