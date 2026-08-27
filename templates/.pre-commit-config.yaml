@@ -98,11 +98,3 @@ repos:
             docs/.* |
             .*/tests/test_.*
           )$
-{%- if cookiecutter.python_c_extensions %}
-  # C style
-  - repo: https://github.com/pre-commit/mirrors-clang-format
-    rev: v22.1.0
-    hooks:
-      - id: clang-format
-        types_or: [c]
-{%- endif %}

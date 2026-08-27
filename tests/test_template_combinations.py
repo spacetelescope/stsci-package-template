@@ -7,21 +7,16 @@ from cookiecutter.main import cookiecutter
 ROOT_DIRECTORY = Path(__file__).parent.parent
 
 COMMON_FILENAMES = [
-    ".github/labeler.yml",
     ".github/pull_request_template.md",
-    ".github/workflows/label.yml",
     ".github/workflows/update.yml",
     ".gitignore",
     "LICENSE.txt",
     "README.md",
-    "docs/_static/stsci_pri_combo_mark_dark_bkgd.png",
-    "docs/_static/stsci_pri_combo_mark_horizonal_white_bkgd.png",
 ]
 READTHEDOCS_FILENAMES = [".readthedocs.yaml"]
 TOWNCRIER_FILENAMES = [
     "towncrier.toml",
     ".github/workflows/changelog.yml",
-    ".github/release.yml",
 ]
 
 
