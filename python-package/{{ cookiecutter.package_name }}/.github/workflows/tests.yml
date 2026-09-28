@@ -131,8 +131,8 @@ jobs:
 {%- elif cookiecutter.task_runner == 'nox' %}
       - uses: wntrblm/nox@5a277b752f6094150e25237d47c34168e2b7526e # 2026.02.09
         with:
-            python-versions: ${{ "{{" }} matrix.python-version {{ "}}" }}
-            session: test${{ "{{" }} matrix.coverage && '_with_coverage' || '' {{ "}}" }}
+          python-versions: ${{ "{{" }} matrix.python-version {{ "}}" }}
+      - run: nox -s "test${{ "{{" }} matrix.coverage && '-with-coverage' || '' {{ "}}" }}"
 {%- endif %}
       - if: matrix.coverage
         name: report coverage to summary
