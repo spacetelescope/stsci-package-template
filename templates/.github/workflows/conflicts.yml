@@ -22,5 +22,5 @@ jobs:
         with:
           persist-credentials: false
       # from https://serverfault.com/a/829314
-      - run: if find . -type f -name "*.rej" -exec false {} +; then exit 0; else exit 1; fi
+      - run: find . -type f -name "*.rej" -exec false {} +
 {% endraw %}
