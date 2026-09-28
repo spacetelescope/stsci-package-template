@@ -18,6 +18,7 @@ Then, ``cd`` to the newly-generated package directory and initialize version con
 
 	cd my_package/
 	git init
+	git add .
 	git commit -am "cookiecutter'd files"
 
 This template `includes a GitHub Actions workflow <https://github.com/spacetelescope/stsci-package-template/blob/main/templates/.github/workflows/update.yml>`_ that
