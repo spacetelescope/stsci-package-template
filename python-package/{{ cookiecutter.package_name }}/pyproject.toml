@@ -19,7 +19,7 @@ documentation = "{% if cookiecutter.publish_docs_to == 'readthedocs.io' %}https:
 repository = "{{ cookiecutter.repository_url }}"
 
 [project.optional-dependencies]
-contrib = [{% if cookiecutter.task_runner == 'nox' %}"nox", {% endif %}"ruff"{% if cookiecutter.task_runner == 'tox' %}, "tox"{% endif -%}]
+contrib = [{% if cookiecutter.task_runner == 'nox' %}"nox", "pyrefly", {% endif %}"ruff"{% if cookiecutter.task_runner == 'tox' %}, "tox"{% endif -%}]
 docs = [
   "numpydoc",
   "pytest_doctestplus",
@@ -28,7 +28,7 @@ docs = [
   "sphinx-rtd-theme",
   "towncrier"
 ]
-test = ["pytest{% if cookiecutter.python_version.split('=')[1].split('.')[1]|int >= 10 %}>=9{% endif %}", "pytest_doctestplus", "coverage"]
+test = ["coverage", "pytest{% if cookiecutter.python_version.split('=')[1].split('.')[1]|int >= 10 %}>=9{% endif %}", "pytest_doctestplus"]
 
 [build-system]
 requires = [
