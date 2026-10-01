@@ -2,7 +2,11 @@ version: 2
 
 updates:
   - package-ecosystem: "github-actions"
-    directory: ".github/workflows"
+    directories:
+      - ".github/workflows"
+      - "templates/.github/workflows"
+      - "python-package/{{ cookiecutter.package_name }}/.github/workflows"
+      - "other-package/{{ cookiecutter.package_name }}/.github/workflows"
     target-branch: "main"
     schedule:
       interval: "monthly"
