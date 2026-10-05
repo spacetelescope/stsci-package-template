@@ -1,0 +1,55 @@
+name: update
+
+on:
+  schedule:
+    - cron: "0 2 1 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    name: update actions in templated GitHub workflows
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: Homebrew/actions/setup-homebrew@e99025eb970cfa124b8284a35463d87426917478 # 2026.09.28.1
+      - run: brew install pinact
+      - run: pinact run --update **/.github/workflows/*
+      - id: updated
+        run: |
+          set +e
+          git diff --quiet --exit-code
+          echo updated=$? >> $GITHUB_OUTPUT
+      - if: steps.updated.outputs.updated
+        id: branch
+        run: echo name=workflows/update-$(date +"%Y%m%d")>> $GITHUB_OUTPUT
+      - if: steps.updated.outputs.updated
+        name: Configure git credentials
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+      - if: steps.updated.outputs.updated
+        name: Apply updates from upstream template
+        run: |
+          git checkout -b ${{ steps.branch.outputs.name }}
+          git restore --staged .
+      - if: steps.updated.outputs.updated
+        name: Commit changes to `${{ steps.branch.outputs.name }}`
+        run: |
+          git add -A
+          git commit -a -m "update actions in templated GitHub workflows"
+          git push -u origin ${{ steps.branch.outputs.name }}
+      - if: steps.updated.outputs.updated
+        name: Create pull request
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr create --head=${{ steps.branch.outputs.name }} \
+          --title='Update actions in templated GitHub workflows' \
+          --body='[Pinact](https://github.com/suzuki-shunsuke/pinact) has detected updates to actions in templated GitHub workflows.'
