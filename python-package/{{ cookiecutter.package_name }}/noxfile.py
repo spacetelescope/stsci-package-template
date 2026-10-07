@@ -46,7 +46,7 @@ def test_with_coverage(session):
     default=False,
 )
 def build(session):
-    session.run("rm", "-rf", "build")
-    session.run("rm", "-rf", "dist")
+    session.run("rm", "-rf", "build", external=True)
+    session.run("rm", "-rf", "dist", external=True)
     session.install("build")
     session.run("python", "-m", "build")
