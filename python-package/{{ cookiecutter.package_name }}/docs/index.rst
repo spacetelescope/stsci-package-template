@@ -6,6 +6,13 @@
 
 {{ cookiecutter.project_description }}
 
+.. attention::
+
+	STScI will stop testing for macOS x86 (Intel Macs earlier than 2020) starting on December 1st 2026.
+	We will still _build_ wheels for macOS x86, just not run tests on that platform.
+
+	macOS ARM64 (`Apple Silicon <https://support.apple.com/en-us/116943>`_) will remain unaffected.
+
 ============
 Contributing
 ============
