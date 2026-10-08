@@ -1,0 +1,9 @@
+spacetelescope/crds
+spacetelescope/gwcs
+spacetelescope/rad
+spacetelescope/roman_datamodels
+spacetelescope/romancal
+spacetelescope/spacekit
+spacetelescope/sphersgeo
+spacetelescope/stdatamodels
+spacetelescope/stwcs
