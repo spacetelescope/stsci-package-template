@@ -112,24 +112,22 @@ def test_python_package_template(
 
 
 @pytest.mark.parametrize(
-    "template_name, extra_context, expected_command, unexpected_command",
+    "template_name, extra_context, expected_docs_group",
     [
         (
             "python-package",
             {"publish_docs_to": "github.io"},
-            "uv run --group=docs",
-            "uv run --with-requirements=docs/requirements.txt",
+            "true",
         ),
         (
             "other-package",
             {},
-            "uv run --with-requirements=docs/requirements.txt",
-            "uv run --group=docs",
+            "false",
         ),
     ],
 )
-def test_sphinx_deploy_workflow_uses_template_docs_dependencies(
-    tmp_path, template_name, extra_context, expected_command, unexpected_command
+def test_sphinx_deploy_workflow_configures_docs_dependency_group(
+    tmp_path, template_name, extra_context, expected_docs_group
 ):
     project_name = "Sphinx Deploy Test"
 
@@ -151,8 +149,7 @@ def test_sphinx_deploy_workflow_uses_template_docs_dependencies(
     )
     workflow_text = workflow.read_text()
 
-    assert expected_command in workflow_text
-    assert unexpected_command not in workflow_text
+    assert f"use-docs-group: {expected_docs_group}" in workflow_text
 
 
 @pytest.mark.parametrize("manage_changelog_with_towncrier", [False, True])

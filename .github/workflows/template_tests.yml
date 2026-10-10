@@ -1,4 +1,4 @@
-name: template combinations
+name: Run template Combination Tests
 
 on:
   pull_request:
