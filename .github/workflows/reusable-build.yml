@@ -1,0 +1,73 @@
+name: Reusable Python package build workflow
+
+on:
+  workflow_call:
+    inputs:
+      package_name:
+        required: true
+        type: string
+      python_c_extensions:
+        required: false
+        type: boolean
+        default: false
+
+permissions: {}
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        runs-on: ${{ inputs.python_c_extensions && fromJSON('["ubuntu-latest", "macos-latest"]') || fromJSON('["ubuntu-latest"]') }}
+    runs-on: ${{ matrix.runs-on }}
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-tags: true
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3"
+      - run: pip install build
+      - if: inputs.python_c_extensions && runner.os == 'Linux'
+        uses: docker/setup-qemu-action@96fe6ef7f33517b61c61be40b68a1882f3264fb8 # v4.2.0
+        with:
+          platforms: all
+      - if: inputs.python_c_extensions
+        uses: pypa/cibuildwheel@294735312765b09d24a2fbec22660ce817587d55 # v4.1.0
+        with:
+          package-dir: ./
+          output-dir: dist/
+      - if: inputs.python_c_extensions
+        run: python -m build --sdist
+      - if: inputs.python_c_extensions == false
+        run: python -m build --sdist --wheel
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: ${{ inputs.python_c_extensions && format('dist-{0}-{1}', runner.os, runner.arch) || 'dist' }}
+          path: ./dist/
+
+  publish:
+    if: (github.event_name == 'release') && (github.event.action == 'released')
+    needs: [build]
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      attestations: write
+    # To add required reviewers before deployment,
+    # edit the protection rules in GitHub Settings:
+    # Settings > Environments > pypi > Add required reviewers
+    environment:
+      name: pypi
+      url: https://pypi.org/p/${{ inputs.package_name }}
+    steps:
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          pattern: dist*
+          path: dist/
+          merge-multiple: true
+      - uses: actions/attest@a1948c3f048ba23858d222213b7c278aabede763 # v4.1.1
+        with:
+          subject-path: "dist/*"
+      # To upload to PyPI without a token, add this workflow file as a Trusted Publisher in the project settings on the PyPI website
+      - uses: pypa/gh-action-pypi-publish@cef221092ed1bacb1cc03d23a2d87d1d172e277b # v1.14.0
