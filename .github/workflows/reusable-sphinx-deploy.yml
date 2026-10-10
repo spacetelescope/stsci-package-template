@@ -27,6 +27,7 @@ jobs:
           path: docs/_build/html/
           retention-days: 1 # the site remains live, but artifact deleted after 1 day
   deploy:
+    if: github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-latest
     permissions:
@@ -38,5 +39,3 @@ jobs:
     steps:
       - uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
         id: deployment
-        with:
-          preview: ${{ github.event_name == 'pull_request' }}
