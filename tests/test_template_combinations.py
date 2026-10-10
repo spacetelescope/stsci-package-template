@@ -110,6 +110,50 @@ def test_python_package_template(
         assert not (expected_package_dir / "setup.py").exists()
 
 
+@pytest.mark.parametrize(
+    "template_name, extra_context, expected_command, unexpected_command",
+    [
+        (
+            "python-package",
+            {"publish_docs_to": "github.io"},
+            "uv run --group=docs",
+            "uv run --with-requirements=docs/requirements.txt",
+        ),
+        (
+            "other-package",
+            {},
+            "uv run --with-requirements=docs/requirements.txt",
+            "uv run --group=docs",
+        ),
+    ],
+)
+def test_sphinx_deploy_workflow_uses_template_docs_dependencies(
+    tmp_path, template_name, extra_context, expected_command, unexpected_command
+):
+    project_name = "Sphinx Deploy Test"
+
+    cookiecutter(
+        template=str(ROOT_DIRECTORY / template_name),
+        output_dir=str(tmp_path),
+        no_input=True,
+        extra_context={
+            "project_name": project_name,
+            "project_description": "test documentation deployment",
+            **extra_context,
+        },
+    )
+
+    workflow = (
+        tmp_path
+        / project_name.lower().replace(" ", "_")
+        / ".github/workflows/sphinx-deploy.yml"
+    )
+    workflow_text = workflow.read_text()
+
+    assert expected_command in workflow_text
+    assert unexpected_command not in workflow_text
+
+
 @pytest.mark.parametrize("manage_changelog_with_towncrier", [False, True])
 def test_other_package_template(
     tmp_path,
