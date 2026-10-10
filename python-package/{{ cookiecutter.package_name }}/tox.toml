@@ -1,11 +1,9 @@
 requires = ["tox>=4.50"]
-env_list = [
-  { product = [
-    { prefix = "py3", start = 11, stop = 14 },
-    ["cov"],
-    ["xdist"],
-  ] }
-]
+env_list = [{ product = [
+  { prefix = "py3", start = 11, stop = 14 },
+  ["cov"],
+  ["xdist"],
+] }]
 
 [env_run_base]
 factors = [["cov"], ["xdist"]]
@@ -27,19 +25,14 @@ deps = [
 ]
 extras = ["test"]
 commands = [
-  [
-    "pytest",
-    { replace = "if", condition = "factor.cov", then = [
-      "--cov",
-      "--cov-report",
-      "xml:{toxinidir}/coverage.xml",
-      "--cov-report",
-      "term-missing",
-    ], extend = true },
-    { replace = "if", condition = "factor.xdist", then = [
-      "--num-processes",
-      "auto",
-    ], extend = true },
-    { replace = "posargs", extend = true }
-  ],
+  ["pytest", { replace = "if", condition = "factor.cov", then = [
+    "--cov",
+    "--cov-report",
+    "xml:{toxinidir}/coverage.xml",
+    "--cov-report",
+    "term-missing",
+  ], extend = true }, { replace = "if", condition = "factor.xdist", then = [
+    "--num-processes",
+    "auto",
+  ], extend = true }, { replace = "posargs", extend = true }],
 ]

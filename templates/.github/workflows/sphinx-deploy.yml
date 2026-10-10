@@ -15,10 +15,11 @@ concurrency:
 
 jobs:
   docs:
-    uses: ./.github/workflows/reusable-sphinx-deploy.yml
+    # TODO: Pin to a release tag after the reusable workflow is merged into main.
+    uses: spacetelescope/stsci-package-template/.github/workflows/reusable-sphinx-deploy.yml@main
     permissions:
       contents: read
       pages: write
       id-token: write
     with:
-      use-docs-group: false
+      use-docs-group: {% if cookiecutter.python_version is defined %}true{% else %}false{% endif %}
