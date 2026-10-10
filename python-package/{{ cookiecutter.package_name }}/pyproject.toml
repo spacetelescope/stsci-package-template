@@ -20,14 +20,7 @@ repository = "{{ cookiecutter.repository_url }}"
 
 [project.optional-dependencies]
 contrib = [{% if cookiecutter.task_runner == 'nox' %}"nox", "pyrefly", {% endif %}"ruff"{% if cookiecutter.task_runner == 'tox' %}, "tox"{% endif -%}]
-docs = [
-  "numpydoc",
-  "pytest_doctestplus",
-  "sphinx",
-  "sphinx-autoapi",
-  "sphinx-rtd-theme",
-  "towncrier"
-]
+docs = ["numpydoc", "pytest_doctestplus", "sphinx", "sphinx-autoapi", "sphinx-rtd-theme", "towncrier"]
 test = ["coverage", "pytest{% if cookiecutter.python_version.split('=')[1].split('.')[1]|int >= 10 %}>=9{% endif %}", "pytest_doctestplus"]
 
 [build-system]
