@@ -7,6 +7,7 @@ from cookiecutter.main import cookiecutter
 ROOT_DIRECTORY = Path(__file__).parent.parent
 
 COMMON_FILENAMES = [
+    ".github/ISSUE_TEMPLATE/ISSUE_TEMPLATE.yaml",
     ".github/pull_request_template.md",
     ".github/workflows/update.yml",
     ".gitignore",
