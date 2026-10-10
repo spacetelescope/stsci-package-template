@@ -1,4 +1,4 @@
-name: Update templated GitHub workflows
+name: Update dependencies encoded in templates
 
 on:
   schedule:
@@ -13,6 +13,8 @@ jobs:
   update:
     name: update actions in templated GitHub workflows
     runs-on: ubuntu-latest
+    outputs:
+      updated: ${{ steps.updated.outputs.updated }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -22,34 +24,104 @@ jobs:
       - run: pinact run --update **/.github/workflows/*
       - id: updated
         run: |
-          set +e
-          git diff --quiet --exit-code
-          echo updated=$? >> $GITHUB_OUTPUT
-      - if: steps.updated.outputs.updated
-        id: branch
-        run: echo name=workflows/update-$(date +"%Y%m%d")>> $GITHUB_OUTPUT
-      - if: steps.updated.outputs.updated
-        name: Configure git credentials
+          git diff --binary -- python-package other-package > "$RUNNER_TEMP/workflows.patch"
+          if [[ -s "$RUNNER_TEMP/workflows.patch" ]]; then
+            echo updated=true >> "$GITHUB_OUTPUT"
+          else
+            echo updated=false >> "$GITHUB_OUTPUT"
+          fi
+      - if: steps.updated.outputs.updated == 'true'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: template-dependency-workflows
+          path: ${{ runner.temp }}/workflows.patch
+          if-no-files-found: error
+
+  update-pre-commit:
+    name: update hooks in the pre-commit template
+    runs-on: ubuntu-latest
+    outputs:
+      updated: ${{ steps.updated.outputs.updated }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3"
+      - run: python -m pip install pre-commit
+      - name: Update pre-commit hook revisions while preserving Jinja directives
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-      - if: steps.updated.outputs.updated
-        name: Apply updates from upstream template
+          config="$RUNNER_TEMP/pre-commit-config.yaml"
+          sed '/^{%/s/^/# /' templates/.pre-commit-config.yaml > "$config"
+          pre-commit autoupdate --config "$config"
+          sed '/^# {%/s/^# //' "$config" > templates/.pre-commit-config.yaml
+      - id: updated
         run: |
-          git checkout -b ${{ steps.branch.outputs.name }}
-          git restore --staged .
-      - if: steps.updated.outputs.updated
-        name: Commit changes to `${{ steps.branch.outputs.name }}`
-        run: |
-          git add -A
-          git commit -a -m "update actions in templated GitHub workflows"
-          git push -u origin ${{ steps.branch.outputs.name }}
-      - if: steps.updated.outputs.updated
-        name: Create pull request
+          git diff --binary -- templates/.pre-commit-config.yaml > "$RUNNER_TEMP/pre-commit.patch"
+          if [[ -s "$RUNNER_TEMP/pre-commit.patch" ]]; then
+            echo updated=true >> "$GITHUB_OUTPUT"
+          else
+            echo updated=false >> "$GITHUB_OUTPUT"
+          fi
+      - if: steps.updated.outputs.updated == 'true'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: template-dependency-pre-commit
+          path: ${{ runner.temp }}/pre-commit.patch
+          if-no-files-found: error
+
+  create-pull-request:
+    name: create a pull request for template dependency updates
+    needs: [update, update-pre-commit]
+    if: needs.update.outputs.updated == 'true' || needs.update-pre-commit.outputs.updated == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          pattern: template-dependency-*
+          merge-multiple: true
+          path: ${{ runner.temp }}/template-dependencies
+      - id: branch
+        run: echo "name=dependencies/update-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "$GITHUB_OUTPUT"
+      - name: Configure git credentials
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh pr create --head=${{ steps.branch.outputs.name }} \
-          --title='Update actions in templated GitHub workflows' \
-          --body='[Pinact](https://github.com/suzuki-shunsuke/pinact) has detected updates to actions in templated GitHub workflows.'
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}"
+      - name: Apply template dependency updates
+        env:
+          BRANCH_NAME: ${{ steps.branch.outputs.name }}
+        run: |
+          git checkout -b "$BRANCH_NAME"
+          git apply "$RUNNER_TEMP/template-dependencies/"*.patch
+      - name: Commit template dependency updates
+        env:
+          BRANCH_NAME: ${{ steps.branch.outputs.name }}
+        run: |
+          git add -u
+          git commit -m "Update Dependencies Encoded In Templates"
+          git push -u origin "$BRANCH_NAME"
+      - name: Create pull request
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH_NAME: ${{ steps.branch.outputs.name }}
+          WORKFLOWS_UPDATED: ${{ needs.update.outputs.updated }}
+          PRE_COMMIT_UPDATED: ${{ needs.update-pre-commit.outputs.updated }}
+        run: |
+          body="$RUNNER_TEMP/template-dependencies/pr-body.md"
+          : > "$body"
+          if [[ "$WORKFLOWS_UPDATED" == 'true' ]]; then
+            printf '%s\n' '[Pinact](https://github.com/suzuki-shunsuke/pinact) has detected updates to actions in templated GitHub workflows.' >> "$body"
+          fi
+          if [[ "$PRE_COMMIT_UPDATED" == 'true' ]]; then
+            printf '%s\n' '[pre-commit](https://pre-commit.com/) has detected updates to hook revisions in `templates/.pre-commit-config.yaml`.' >> "$body"
+          fi
+          gh pr create --head="$BRANCH_NAME" \
+            --title='Update Dependencies Encoded In Templates' \
+            --body-file="$body"
