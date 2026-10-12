@@ -3,7 +3,7 @@ breaking-change:
   - changed-files:
       - any-glob-to-any-file:
           - "changes/*.breaking.rst"
-{% endif %}
+{% endif -%}
 documentation:
   - changed-files:
       - all-globs-to-any-file:
