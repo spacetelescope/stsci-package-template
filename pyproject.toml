@@ -9,9 +9,17 @@ classifiers = [
   "Intended Audience :: Science/Research",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
   "Topic :: Scientific/Engineering :: Astronomy",
 ]
-dependencies = []
+dependencies = [
+  "nox>=2026.8",
+  "packaging>=26.3",
+  "requests>=2.34",
+  "tomlkit>=0.15",
+]
 dynamic = ["version"]
 
 [project.urls]
@@ -20,8 +28,14 @@ repository = "https://github.com/spacetelescope/stsci-package-template"
 
 [project.optional-dependencies]
 contrib = ["nox", "pyrefly", "ruff"]
-docs = ["numpydoc", "pytest_doctestplus", "sphinx", "sphinx-autoapi", "sphinx-rtd-theme", "towncrier"]
-test = ["coverage", "pytest>=9", "pytest_doctestplus", "cookiecutter"]
+docs = ["numpydoc", "pytest_doctestplus>=1.7", "sphinx", "sphinx-autoapi", "sphinx-rtd-theme", "towncrier"]
+test = [
+  "coverage>=7.15",
+  "pytest>=9.0",
+  "pytest_doctestplus>=1.7",
+  "cookiecutter>=2.6",
+  "GitPython>=3.2",
+]
 
 [build-system]
 requires = [
@@ -64,19 +78,6 @@ source = "vcs"
 
 [tool.hatch.version.raw-options]
 version_scheme = "release-branch-semver"
-
-[tool.numpydoc_validation]
-checks = [
-  "all",
-  "EX01",  # No examples section found
-  "SA01",  # See Also section not found
-  "ES01",  # No extended summary found
-  "GL08",  # Object does not have a docstring. Ruff catches these, and allows more granular ignores.
-  "PR01",  # Parameters not documented. Already caught by ruff.
-  "PR09",  # Parameter description should finish with a period
-  "RT02",  # First line of return should contain only the type
-  "RT05",  # Return value description should finish with a period
-]
 
 [tool.pytest]
 minversion = "9"
