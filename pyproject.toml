@@ -80,3 +80,4 @@ checks = [
 
 [tool.pytest]
 minversion = "9"
+testpaths = ["tests", "src", "docs"]
