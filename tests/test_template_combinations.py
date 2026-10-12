@@ -57,7 +57,9 @@ def test_python_package_template(
         },
     )
 
-    expected_package_name = project_name.lower().replace(" ", "_").replace("-", "_").replace("'", "")
+    expected_package_name = (
+        project_name.lower().replace(" ", "_").replace("-", "_").replace("'", "")
+    )
     expected_package_dir = tmp_path / expected_package_name
     assert expected_package_dir.exists()
     assert expected_package_dir.is_dir()
@@ -96,7 +98,10 @@ def test_python_package_template(
     with pyproject_toml_filename.open("rb") as pyproject_toml_file:
         pyproject_toml = tomllib.load(pyproject_toml_file)
 
-        assert f"{python_build_backend}.build" in pyproject_toml["build-system"]["build-backend"]
+        assert (
+            f"{python_build_backend}.build"
+            in pyproject_toml["build-system"]["build-backend"]
+        )
 
         assert pyproject_toml["project"]["name"] == expected_package_name
         assert pyproject_toml["project"]["description"] == project_description
@@ -138,7 +143,11 @@ def test_sphinx_deploy_workflow_configures_docs_dependency_extra(
         },
     )
 
-    workflow = tmp_path / project_name.lower().replace(" ", "_") / ".github/workflows/sphinx-deploy.yml"
+    workflow = (
+        tmp_path
+        / project_name.lower().replace(" ", "_")
+        / ".github/workflows/sphinx-deploy.yml"
+    )
     workflow_text = workflow.read_text()
 
     assert f"use-docs-extra: {expected_docs_extra}" in workflow_text
@@ -163,7 +172,9 @@ def test_other_package_template(
         },
     )
 
-    expected_package_name = project_name.lower().replace(" ", "_").replace("-", "_").replace("'", "")
+    expected_package_name = (
+        project_name.lower().replace(" ", "_").replace("-", "_").replace("'", "")
+    )
     expected_package_dir = tmp_path / expected_package_name
     assert expected_package_dir.exists()
     assert expected_package_dir.is_dir()
