@@ -1,3 +1,4 @@
+{% raw %}
 name: changelog
 
 on:
@@ -10,7 +11,7 @@ on:
       - reopened
 
 concurrency:
-  group: ${{ "{{" }} github.workflow {{ "}}" }}-${{ "{{" }} github.event.pull_request.number || github.ref {{ "}}" }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 permissions: {}
@@ -19,3 +20,4 @@ jobs:
   check:
     # TODO: Pin to a release tag after the reusable workflow is merged into main.
     uses: spacetelescope/stsci-package-template/.github/workflows/reusable-changelog.yml@main
+{% endraw %}
