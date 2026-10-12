@@ -88,7 +88,7 @@ jobs:
       - name: run linters and formatters
         run: |
           git init
-          git add ./*
+          git add -A
           prek run --all-files --verbose --show-diff-on-failure
         working-directory: build/test_${{ strategy.job-index }}/
       - if: ${{ matrix.directory == 'python-package' }}
