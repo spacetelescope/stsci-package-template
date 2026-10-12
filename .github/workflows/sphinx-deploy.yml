@@ -22,4 +22,4 @@ jobs:
       pages: write
       id-token: write
     with:
-      use-docs-group: true
+      use-docs-extra: true

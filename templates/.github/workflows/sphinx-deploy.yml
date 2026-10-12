@@ -22,4 +22,4 @@ jobs:
       pages: write
       id-token: write
     with:
-      use-docs-group: {% if cookiecutter.python_version is defined %}true{% else %}false{% endif %}
+      use-docs-extra: {% if cookiecutter.python_version is defined %}true{% else %}false{% endif %}

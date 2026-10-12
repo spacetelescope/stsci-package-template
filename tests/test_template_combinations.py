@@ -108,7 +108,7 @@ def test_python_package_template(
 
 
 @pytest.mark.parametrize(
-    ("template_name", "extra_context", "expected_docs_group"),
+    ("template_name", "extra_context", "expected_docs_extra"),
     [
         (
             "python-package",
@@ -122,8 +122,8 @@ def test_python_package_template(
         ),
     ],
 )
-def test_sphinx_deploy_workflow_configures_docs_dependency_group(
-    tmp_path, template_name, extra_context, expected_docs_group
+def test_sphinx_deploy_workflow_configures_docs_dependency_extra(
+    tmp_path, template_name, extra_context, expected_docs_extra
 ):
     project_name = "Sphinx Deploy Test"
 
@@ -141,7 +141,7 @@ def test_sphinx_deploy_workflow_configures_docs_dependency_group(
     workflow = tmp_path / project_name.lower().replace(" ", "_") / ".github/workflows/sphinx-deploy.yml"
     workflow_text = workflow.read_text()
 
-    assert f"use-docs-group: {expected_docs_group}" in workflow_text
+    assert f"use-docs-extra: {expected_docs_extra}" in workflow_text
 
 
 @pytest.mark.parametrize("manage_changelog_with_towncrier", [False, True])
