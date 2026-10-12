@@ -82,7 +82,9 @@ jobs:
         with:
           persist-credentials: false
       - name: render ${{ matrix.directory }} template with Cookiecutter
-        run: cookiecutter ${{ matrix.directory }} --no-input -o build project_name=test_${{ strategy.job-index }} ${{ matrix.directory == 'python-package' && format('publish_docs_to="readthedocs.io"  task_runner={0} python_build_backend={1} python_c_extensions={2} crds_observatory={3}', matrix.task_runner, matrix.python_build_backend, matrix.python_c_extensions, matrix.crds_observatory) || '' }}
+        run: cookiecutter ${{ matrix.directory }} --no-input -o build project_name=test_${STRATEGY_JOB_INDEX} ${{ matrix.directory == 'python-package' && format('publish_docs_to="readthedocs.io"  task_runner={0} python_build_backend={1} python_c_extensions={2} crds_observatory={3}', matrix.task_runner, matrix.python_build_backend, matrix.python_c_extensions, matrix.crds_observatory) || '' }}
+        env:
+          STRATEGY_JOB_INDEX: ${{ strategy.job-index }}
       - name: run linters and formatters
         run: |
           git init

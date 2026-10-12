@@ -16,5 +16,5 @@ permissions:
 jobs:
   conflicts:
     # TODO: Pin to a release tag after the reusable workflow is merged into main.
-    uses: spacetelescope/stsci-package-template/.github/workflows/reusable-conflicts.yml@main
+    uses: spacetelescope/stsci-package-template/.github/workflows/reusable-conflicts.yml@f42361b8b0de4131384c2e4cf295d1dd73f2cf35
 {%- endraw %}

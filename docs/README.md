@@ -1,13 +1,15 @@
 # Writing and maintaining documentation
 
-Documentation for `stsci-package-template` is written in [Sphinx reStructuredText (`.rst`)](https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html)
+Documentation for `stsci_package_template` is written in [Sphinx reStructuredText (`.rst`)](https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html)
 in this `docs/` directory, and is hosted online at https://spacetelescope.github.io/stsci-package-template
 
 ### Building documentation locally
 
+To build the docs locally (assuming you have [set up your environment as described in `CONTRIBUTING.md`](../CONTRIBUTING.md#creating-a-development-environment)):
+
 ```shell
 cd docs/
-pip install -r requirements.txt
+pip install ..[docs]
 make clean
 make html
 ```

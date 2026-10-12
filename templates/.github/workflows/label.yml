@@ -1,7 +1,7 @@
 name: label
 
 on:
-  pull_request_target:
+  pull_request_target: # zizmor: ignore[dangerous-triggers] Required to label fork PRs; calls only the pinned trusted reusable workflow.
 
 concurrency:
   group: ${{ "{{" }} github.workflow {{ "}}" }}-${{ "{{" }} github.event.pull_request.number || github.ref {{ "}}" }}
@@ -13,4 +13,4 @@ permissions:
 jobs:
   label:
     # TODO: Pin to a release tag after the reusable workflow is merged into main.
-    uses: spacetelescope/stsci-package-template/.github/workflows/reusable-label.yml@main
+    uses: spacetelescope/stsci-package-template/.github/workflows/reusable-label.yml@f42361b8b0de4131384c2e4cf295d1dd73f2cf35

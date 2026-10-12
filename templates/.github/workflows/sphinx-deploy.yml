@@ -16,7 +16,7 @@ concurrency:
 jobs:
   docs:
     # TODO: Pin to a release tag after the reusable workflow is merged into main.
-    uses: spacetelescope/stsci-package-template/.github/workflows/reusable-sphinx-deploy.yml@main
+    uses: spacetelescope/stsci-package-template/.github/workflows/reusable-sphinx-deploy.yml@f42361b8b0de4131384c2e4cf295d1dd73f2cf35
     permissions:
       contents: read
       pages: write

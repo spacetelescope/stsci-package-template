@@ -4,6 +4,11 @@
 
 # STScI Package Template
 
+[![build](https://github.com/spacetelescope/stsci-package-template/actions/workflows/build.yml/badge.svg)](https://github.com/spacetelescope/stsci-package-template/actions/workflows/build.yml)
+[![tests](https://github.com/spacetelescope/stsci-package-template/actions/workflows/tests.yml/badge.svg)](https://github.com/spacetelescope/stsci-package-template/actions/workflows/tests.yml)
+[![Powered by STScI](https://img.shields.io/badge/powered%20by-STScI-blue.svg?colorA=707170&colorB=3e8ddd&style=flat)](https://www.stsci.edu)
+[![GitHub Pages](https://github.com/spacetelescope/stsci-package-template/actions/workflows/pages-build-deployment/badge.svg)](https://spacetelescope.github.io/stsci-package-template)
+
 This [Cookiecutter template](https://github.com/cookiecutter/cookiecutter)
 defines best practices and boilerplate for STScI packages.
 
@@ -31,8 +36,11 @@ You can also do this manually with `cruft update`.
 
 See [Recommended GitHub Repository Settings](https://spacetelescope.github.io/stsci-package-template/github)
 for additional recommendations on how to set up your new GitHub repository.
+
 ## Recommended GitHub Repository Settings
+
 Read [the docs page for additional recommendations on how to set up your GitHub repository](https://spacetelescope.github.io/stsci-package-template/github).
+
 ## Acknowledgements
 
 Adapted from [Cookiecutter PyPackage](https://github.com/audreyfeldroy/cookiecutter-pypackage)

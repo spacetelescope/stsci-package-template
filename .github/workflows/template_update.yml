@@ -5,9 +5,7 @@ on:
     - cron: "0 2 1 * *"
   workflow_dispatch:
 
-permissions:
-  contents: write
-  pull-requests: write
+permissions: {}
 
 jobs:
   update:
@@ -76,6 +74,9 @@ jobs:
     needs: [update, update-pre-commit]
     if: needs.update.outputs.updated == 'true' || needs.update-pre-commit.outputs.updated == 'true'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:

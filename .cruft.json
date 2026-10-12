@@ -1,0 +1,24 @@
+{
+  "template": "https://github.com/spacetelescope/stsci-package-template.git",
+  "commit": "aacead5380530fc495ce5d6300a3157dcfe83c0a",
+  "checkout": null,
+  "context": {
+    "cookiecutter": {
+      "project_name": "stsci-package-template",
+      "package_name": "stsci_package_template",
+      "repository_url": "https://github.com/spacetelescope/stsci-package-template",
+      "git_username": "WilliamJamieson",
+      "project_description": "Python library to assist with automatons in packages based off the stsci-package-template",
+      "manage_changelog_with_towncrier": true,
+      "publish_docs_to": "github.io",
+      "task_runner": "nox",
+      "python_version": ">=3.12",
+      "python_c_extensions": false,
+      "python_build_backend": "hatchling",
+      "crds_observatory": "none",
+      "_template": "https://github.com/spacetelescope/stsci-package-template.git",
+      "_commit": "aacead5380530fc495ce5d6300a3157dcfe83c0a"
+    }
+  },
+  "directory": "python-package"
+}
