@@ -21,7 +21,7 @@ repository = "https://github.com/spacetelescope/stsci-package-template"
 [project.optional-dependencies]
 contrib = ["nox", "pyrefly", "ruff"]
 docs = ["numpydoc", "pytest_doctestplus", "sphinx", "sphinx-autoapi", "sphinx-rtd-theme", "towncrier"]
-test = ["coverage", "pytest>=9", "pytest_doctestplus"]
+test = ["coverage", "pytest>=9", "pytest_doctestplus", "cookiecutter"]
 
 [build-system]
 requires = [
