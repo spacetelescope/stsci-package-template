@@ -43,25 +43,30 @@ jobs:
       - if: steps.upstream-updates.outputs.available
         name: Apply updates from upstream template
         run: |
-          git checkout -b ${{ steps.branch.outputs.name }}
+          git checkout -b ${STEPS_BRANCH_OUTPUTS_NAME}
           pipx run cruft update --skip-apply-ask --refresh-private-variables
           git restore --staged .
+        env:
+          STEPS_BRANCH_OUTPUTS_NAME: ${{ steps.branch.outputs.name }}
       - if: steps.upstream-updates.outputs.available
         name: Commit changes to `${{ steps.branch.outputs.name }}`
         run: |
           git add -A
           git commit -a -m "apply changes from the upstream template with Cruft"
-          git push -u origin ${{ steps.branch.outputs.name }}
+          git push -u origin ${STEPS_BRANCH_OUTPUTS_NAME}
+        env:
+          STEPS_BRANCH_OUTPUTS_NAME: ${{ steps.branch.outputs.name }}
       - if: steps.upstream-updates.outputs.available
         name: Create pull request
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          STEPS_BRANCH_OUTPUTS_NAME: ${{ steps.branch.outputs.name }}
         run: |
-          gh pr create --head=${{ steps.branch.outputs.name }} \
+          gh pr create --head=${STEPS_BRANCH_OUTPUTS_NAME} \
           --title='[TEMPLATE] Apply update(s) from upstream template' \
           --body='[Cruft](https://cruft.github.io/cruft/) has detected updates to the upstream Cookiecutter template https://github.com/spacetelescope/stsci-package-template
 
           Please manually review any new `*.rej` files (changes that failed to apply automatically).
 
           > [!TIP]
-          > To skip these updates, modify `${{ steps.branch.outputs.name }}` to only increment `.cruft.json`.'
+          > To skip these updates, modify `${STEPS_BRANCH_OUTPUTS_NAME}` to only increment `.cruft.json`.'

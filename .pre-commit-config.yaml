@@ -10,9 +10,19 @@ repos:
     rev: v6.0.0
     hooks:
       - id: check-added-large-files
+      - id: check-ast
+        exclude: ^(python-package|other-package|templates)/
       - id: check-case-conflict
+      - id: check-yaml
+        exclude: ^(python-package|other-package|templates)/
+        args:
+          - --unsafe
+      - id: check-toml
+        exclude: ^(python-package|other-package|templates)/
       - id: check-merge-conflict
       - id: check-symlinks
+      - id: debug-statements
+        exclude: ^(python-package|other-package|templates)/
       - id: detect-private-key
       - id: end-of-file-fixer
       - id: trailing-whitespace
@@ -21,6 +31,45 @@ repos:
     rev: 26.9.0
     hooks:
       - id: towncrier-check
+  # format YAML and Markdown
+  - repo: https://github.com/rbubley/mirrors-prettier
+    rev: v3.9.9
+    hooks:
+      - id: prettier
+        exclude: ^(python-package|other-package|templates)/
+        types_or:
+          - yaml
+          - markdown
+  # lint YAML
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.38.0
+    hooks:
+      - id: yamllint
+        exclude: ^(python-package|other-package|templates)/
+        args: [-d relaxed]
+  # lint GitHub Actions workflows
+  - repo: https://github.com/rhysd/actionlint
+    rev: v1.7.12
+    hooks:
+      - id: actionlint
+        exclude: ^(python-package|other-package|templates)/
+  # harden GitHub Actions workflows
+  - repo: https://github.com/zizmorcore/zizmor-pre-commit
+    rev: v1.30.1
+    hooks:
+      - id: zizmor
+        exclude: ^(python-package|other-package|templates)/
+        args: ["--fix=all"]
+  # format and lint TOML
+  - repo: https://github.com/tombi-toml/tombi-pre-commit
+    rev: v1.7.3
+    hooks:
+      - id: tombi-format
+        exclude: ^(python-package|other-package|templates)/
+        args: ["--offline"]
+      - id: tombi-lint
+        exclude: ^(python-package|other-package|templates)/
+        args: ["--offline"]
   # spell-checking
   - repo: https://github.com/codespell-project/codespell
     rev: v2.4.3
@@ -31,8 +80,21 @@ repos:
           - --summary
         additional_dependencies:
           - tomli
-  # lint GitHub Actions workflows
-  - repo: https://github.com/rhysd/actionlint
-    rev: v1.7.12
+  # simple text searches for common issues
+  - repo: https://github.com/pre-commit/pygrep-hooks
+    rev: v1.10.0
     hooks:
-      - id: actionlint
+      - id: rst-directive-colons
+      - id: rst-inline-touching-normal
+      - id: text-unicode-replacement-char
+  # lint and format
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.17.0
+    hooks:
+      - id: ruff-format
+        exclude: ^(python-package|other-package|templates)/
+      - id: ruff-check
+        exclude: ^(python-package|other-package|templates)/
+        args:
+          - --fix
+          - --show-fixes

@@ -22,7 +22,7 @@ permissions: {}
 jobs:
   test:
     # TODO: Pin to a release tag after the reusable workflow is merged into main.
-    uses: spacetelescope/stsci-package-template/.github/workflows/reusable-tests.yml@main
+    uses: spacetelescope/stsci-package-template/.github/workflows/reusable-tests.yml@f42361b8b0de4131384c2e4cf295d1dd73f2cf35
     permissions:
       contents: read
     with:

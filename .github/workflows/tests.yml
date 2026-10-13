@@ -1,0 +1,30 @@
+name: tests
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+  push:
+    branches:
+      - main
+    tags:
+      - "*"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  test:
+    # TODO: Pin to a release tag after the reusable workflow is merged into main.
+    uses: spacetelescope/stsci-package-template/.github/workflows/reusable-tests.yml@f42361b8b0de4131384c2e4cf295d1dd73f2cf35
+    permissions:
+      contents: read
+    with:
+      task_runner: nox
+      crds_observatory: none

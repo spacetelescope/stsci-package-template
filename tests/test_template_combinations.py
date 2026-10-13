@@ -1,7 +1,7 @@
+import tomllib
 from pathlib import Path
 
 import pytest
-import tomllib
 from cookiecutter.main import cookiecutter
 
 ROOT_DIRECTORY = Path(__file__).parent.parent
@@ -25,7 +25,7 @@ TOWNCRIER_FILENAMES = [
 @pytest.mark.parametrize("publish_docs_to", ["none", "readthedocs.io"])
 @pytest.mark.parametrize("task_runner", ["none", "nox", "tox"])
 @pytest.mark.parametrize(
-    "python_build_backend,python_c_extensions",
+    ("python_build_backend", "python_c_extensions"),
     [("hatchling", False), ("setuptools", False), ("setuptools", True)],
 )
 @pytest.mark.parametrize("crds_observatory", ["none", "roman"])
@@ -61,7 +61,8 @@ def test_python_package_template(
         project_name.lower().replace(" ", "_").replace("-", "_").replace("'", "")
     )
     expected_package_dir = tmp_path / expected_package_name
-    assert expected_package_dir.exists() and expected_package_dir.is_dir()
+    assert expected_package_dir.exists()
+    assert expected_package_dir.is_dir()
 
     for filename in COMMON_FILENAMES:
         assert (expected_package_dir / filename).exists()
@@ -94,7 +95,7 @@ def test_python_package_template(
 
     assert pyproject_toml_filename.exists()
 
-    with open(pyproject_toml_filename, "rb") as pyproject_toml_file:
+    with pyproject_toml_filename.open("rb") as pyproject_toml_file:
         pyproject_toml = tomllib.load(pyproject_toml_file)
 
         assert (
@@ -112,7 +113,7 @@ def test_python_package_template(
 
 
 @pytest.mark.parametrize(
-    "template_name, extra_context, expected_docs_group",
+    ("template_name", "extra_context", "expected_docs_extra"),
     [
         (
             "python-package",
@@ -126,8 +127,8 @@ def test_python_package_template(
         ),
     ],
 )
-def test_sphinx_deploy_workflow_configures_docs_dependency_group(
-    tmp_path, template_name, extra_context, expected_docs_group
+def test_sphinx_deploy_workflow_configures_docs_dependency_extra(
+    tmp_path, template_name, extra_context, expected_docs_extra
 ):
     project_name = "Sphinx Deploy Test"
 
@@ -149,7 +150,7 @@ def test_sphinx_deploy_workflow_configures_docs_dependency_group(
     )
     workflow_text = workflow.read_text()
 
-    assert f"use-docs-group: {expected_docs_group}" in workflow_text
+    assert f"use-docs-extra: {expected_docs_extra}" in workflow_text
 
 
 @pytest.mark.parametrize("manage_changelog_with_towncrier", [False, True])
@@ -175,7 +176,8 @@ def test_other_package_template(
         project_name.lower().replace(" ", "_").replace("-", "_").replace("'", "")
     )
     expected_package_dir = tmp_path / expected_package_name
-    assert expected_package_dir.exists() and expected_package_dir.is_dir()
+    assert expected_package_dir.exists()
+    assert expected_package_dir.is_dir()
 
     for filename in COMMON_FILENAMES:
         assert (expected_package_dir / filename).exists()
