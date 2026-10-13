@@ -10,7 +10,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  update:
+  update-workflow-actions:
     name: update actions in templated GitHub workflows
     runs-on: ubuntu-latest
     outputs:
@@ -37,7 +37,7 @@ jobs:
           path: ${{ runner.temp }}/workflows.patch
           if-no-files-found: error
 
-  update-pre-commit:
+  update-pre-commit-hooks:
     name: update hooks in the pre-commit template
     runs-on: ubuntu-latest
     outputs:
