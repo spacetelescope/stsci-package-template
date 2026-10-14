@@ -1,3 +1,0 @@
-# Only discover the repository-root hook configuration.
-# Root hooks still check files in these directories.
-/*/
