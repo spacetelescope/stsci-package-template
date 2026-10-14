@@ -12,6 +12,8 @@ from stsci_package_template.dependencies import PythonSupport
 from stsci_package_template.pytest import (
     MatrixEntry,
     default_ci_matrix,
+    run_check_labels,
+    run_coverage_report,
     run_pytest,
     run_tagged_ci,
     run_tests,
@@ -251,23 +253,6 @@ def matrix_entry_expected(
     }
 
 
-@pytest.fixture(params=["log", "file"])
-def github_output(
-    request: pytest.FixtureRequest,
-    monkeypatch: pytest.MonkeyPatch,
-    tmp_path: Path,
-) -> Path | None:
-    """Isolate GitHub Actions output and seed a file to check appending."""
-    if request.param == "log":
-        monkeypatch.delenv("GITHUB_OUTPUT", raising=False)
-        return None
-
-    output_path = tmp_path / "github-output"
-    output_path.write_text("existing=value\n", encoding="utf-8")
-    monkeypatch.setenv("GITHUB_OUTPUT", str(output_path))
-    return output_path
-
-
 class TestMatrixEntry:
     """Test matrix identifiers, Nox parameters, and workflow output."""
 
@@ -454,3 +439,108 @@ def test_run_tagged_ci(
         assert github_output.read_text(encoding="utf-8") == (
             f"existing=value\nnox_sessions={expected}\n"
         )
+
+
+@pytest.mark.parametrize(
+    ("event_name", "pr_labels", "labels", "expected"),
+    [
+        pytest.param("push", None, [], True, id="push-no-labels"),
+        pytest.param("push", None, ["slow"], True, id="push-labels"),
+        pytest.param(None, None, ["slow"], True, id="local"),
+        pytest.param("pull_request", [], [], True, id="pr-no-labels"),
+        pytest.param("pull_request", ["slow"], ["slow"], True, id="pr-match"),
+        pytest.param(
+            "pull_request_target", ["a", "slow"], ["slow", "b"], True, id="pr-any"
+        ),
+        pytest.param("pull_request", ["other"], ["slow"], False, id="pr-mismatch"),
+        pytest.param("pull_request", [], ["slow"], False, id="pr-unlabeled"),
+    ],
+)
+def test_run_check_labels(
+    session: MagicMock,
+    github_output: Path | None,
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+    event_name: str | None,
+    pr_labels: list[str] | None,
+    labels: list[str],
+    expected: bool,
+) -> None:
+    """Decide whether a matrix entry runs based on the pull request labels."""
+    if event_name is None:
+        monkeypatch.delenv("GITHUB_EVENT_NAME", raising=False)
+    else:
+        monkeypatch.setenv("GITHUB_EVENT_NAME", event_name)
+
+    event_path = tmp_path / "event.json"
+    event = (
+        {}
+        if pr_labels is None
+        else {"pull_request": {"labels": [{"name": name} for name in pr_labels]}}
+    )
+    event_path.write_text(json.dumps(event), encoding="utf-8")
+    monkeypatch.setenv("GITHUB_EVENT_PATH", str(event_path))
+
+    session.posargs = [json.dumps({"name": "entry", "labels": labels})]
+
+    run_check_labels(session)
+
+    result = f"run={'true' if expected else 'false'}"
+    if github_output is None:
+        session.log.assert_called_once_with(result)
+    else:
+        assert github_output.read_text(encoding="utf-8") == (
+            f"existing=value\n{result}\n"
+        )
+
+
+@pytest.mark.parametrize("posargs", [[], ["{}", "{}"]])
+def test_run_check_labels_usage(session: MagicMock, posargs: list[str]) -> None:
+    """Require exactly one matrix entry argument."""
+    session.posargs = posargs
+    session.error.side_effect = RuntimeError
+
+    with pytest.raises(RuntimeError):
+        run_check_labels(session)
+
+
+@pytest.mark.parametrize("parallel", [True, False])
+@pytest.mark.parametrize("summary", [True, False])
+def test_run_coverage_report(
+    session: MagicMock,
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+    parallel: bool,
+    summary: bool,
+) -> None:
+    """Combine only when parallel data exists and append the summary if set."""
+    monkeypatch.chdir(tmp_path)
+    if parallel:
+        (tmp_path / ".coverage.host.1234").touch()
+
+    summary_path = tmp_path / "summary.md"
+    if summary:
+        summary_path.write_text("existing\n", encoding="utf-8")
+        monkeypatch.setenv("GITHUB_STEP_SUMMARY", str(summary_path))
+    else:
+        monkeypatch.delenv("GITHUB_STEP_SUMMARY", raising=False)
+
+    report = "| Name | Cover |"
+    session.run.return_value = report
+
+    run_coverage_report(session)
+
+    session.install.assert_called_once_with("coverage[toml]")
+    report_call = call(
+        "coverage", "report", "-i", "-m", "--format=markdown", silent=True
+    )
+    assert session.run.call_args_list == (
+        [call("coverage", "combine"), report_call] if parallel else [report_call]
+    )
+    session.log.assert_called_once_with(report)
+    if summary:
+        assert summary_path.read_text(encoding="utf-8") == (
+            f"existing\n## Coverage Report\n{report}\n"
+        )
+    else:
+        assert not summary_path.exists()

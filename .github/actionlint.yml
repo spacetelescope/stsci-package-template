@@ -3,3 +3,7 @@ paths:
     ignore:
       - "SC2086"
       - "SC2046"
+      # actionlint does not yet support the `$/` self-repository `uses:` syntax
+      # https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#jobsjob_idstepsuses
+      - 'reusable workflow call "\$/.+" at "uses" is not following the format'
+      - 'specifying action "\$/.+" in invalid format because ref is missing'

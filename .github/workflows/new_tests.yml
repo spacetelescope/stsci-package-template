@@ -1,0 +1,29 @@
+name: new tests
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+  push:
+    branches:
+      - main
+    tags:
+      - "*"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  test:
+    uses: $/.github/workflows/reusable-nox-matrix.yml
+    permissions:
+      contents: read
+    with:
+      session: ci_sessions
+      crds_observatory: none

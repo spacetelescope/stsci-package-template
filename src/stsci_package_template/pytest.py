@@ -508,3 +508,82 @@ def run_tagged_ci(session: nox.Session, tag: str) -> None:
             output_file.write(f"nox_sessions={result}\n")
     else:
         session.log(f"nox_sessions={result}")
+
+
+PR_EVENTS = frozenset({"pull_request", "pull_request_target"})
+
+
+def pull_request_labels() -> set[str] | None:
+    """
+    Return the labels of the triggering GitHub pull request.
+
+    Returns
+    -------
+        The pull request label names, or ``None`` if the workflow was not
+        triggered by a pull request.
+
+    """
+    if os.environ.get("GITHUB_EVENT_NAME") not in PR_EVENTS:
+        return None
+
+    event = json.loads(
+        Path(os.environ["GITHUB_EVENT_PATH"]).read_text(encoding="utf-8")
+    )
+    return {label["name"] for label in event["pull_request"]["labels"]}
+
+
+def run_check_labels(session: nox.Session) -> None:
+    """
+    Check if a ``MatrixEntry.github_matrix`` entry should run given its labels.
+
+    The entry runs if it has no labels, the workflow was not triggered by a
+    pull request, or the pull request has any of the entry's labels. In GitHub
+    Actions this writes ``run=<true|false>`` to ``GITHUB_OUTPUT``; otherwise the
+    result is logged.
+
+    Parameters
+    ----------
+    session :
+        The nox session object, whose single posarg is the matrix entry JSON.
+
+    """
+    if len(session.posargs) != 1:
+        session.error("Usage: nox -s check-labels -- <matrix-entry-json>")
+
+    labels = set(json.loads(session.posargs[0])["labels"])
+    pr_labels = pull_request_labels()
+    run = not labels or pr_labels is None or bool(labels & pr_labels)
+    result = f"run={json.dumps(run)}"
+
+    if output_path := os.environ.get("GITHUB_OUTPUT"):
+        with Path(output_path).open("a", encoding="utf-8") as output_file:
+            output_file.write(f"{result}\n")
+    else:
+        session.log(result)
+
+
+def run_coverage_report(session: nox.Session) -> None:
+    """
+    Combine any parallel coverage data and report it as markdown.
+
+    In GitHub Actions the report is also appended to ``GITHUB_STEP_SUMMARY``.
+
+    Parameters
+    ----------
+    session :
+        The nox session object.
+
+    """
+    session.install("coverage[toml]")
+
+    if any(Path().glob(".coverage.*")):
+        session.run("coverage", "combine")
+
+    report = session.run(
+        "coverage", "report", "-i", "-m", "--format=markdown", silent=True
+    )
+    session.log(report)
+
+    if summary_path := os.environ.get("GITHUB_STEP_SUMMARY"):
+        with Path(summary_path).open("a", encoding="utf-8") as summary_file:
+            summary_file.write(f"## Coverage Report\n{report}\n")

@@ -1,0 +1,75 @@
+name: Reusable nox session test workflow
+
+on:
+  workflow_call:
+    inputs:
+      session:
+        description: nox session that writes `actions` (a MatrixEntry.github_matrix JSON object) to GITHUB_OUTPUT
+        required: true
+        type: string
+      crds_observatory:
+        required: false
+        type: string
+        default: none
+      crds_context:
+        required: false
+        type: string
+        default: ""
+
+permissions: {}
+
+env:
+  CRDS_PATH: ${{ inputs.crds_observatory != 'none' && '/tmp/data/crds_cache' || '' }}
+  CRDS_OBSERVATORY: ${{ inputs.crds_observatory != 'none' && inputs.crds_observatory || '' }}
+  CRDS_SERVER_URL: ${{ inputs.crds_observatory != 'none' && format('https://{0}-crds.stsci.edu', inputs.crds_observatory) || '' }}
+  CRDS_CONTEXT: ${{ inputs.crds_observatory != 'none' && inputs.crds_context || '' }}
+  CRDS_CLIENT_RETRY_COUNT: ${{ inputs.crds_observatory != 'none' && '3' || '' }}
+  CRDS_CLIENT_RETRY_DELAY_SECONDS: ${{ inputs.crds_observatory != 'none' && '20' || '' }}
+
+jobs:
+  matrix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: $/.github/actions/setup-nox
+      - id: matrix
+        run: nox -s "$SESSION"
+        env:
+          SESSION: ${{ inputs.session }}
+      - name: check labels
+        id: labels
+        run: nox -s check-labels -- "$ACTIONS"
+        env:
+          ACTIONS: ${{ steps.matrix.outputs.actions }}
+    outputs:
+      actions: ${{ steps.matrix.outputs.actions }}
+      run: ${{ steps.labels.outputs.run }}
+
+  test:
+    needs: matrix
+    if: needs.matrix.outputs.run == 'true'
+    name: ${{ fromJSON(needs.matrix.outputs.actions || '{}').name || inputs.session }}
+    runs-on: ${{ fromJSON(needs.matrix.outputs.actions || '{}').runs_on || 'ubuntu-latest' }}
+    env:
+      NOX_COMMAND: ${{ fromJSON(needs.matrix.outputs.actions || '{}').nox }}
+      COVERAGE: ${{ contains(format('-{0}-', fromJSON(needs.matrix.outputs.actions || '{}').options), '-coverage-') }}
+    steps:
+      - if: inputs.crds_observatory != 'none'
+        name: cache CRDS reference files retrieved during testing
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ env.CRDS_PATH }}
+          key: ${{ inputs.crds_context }}
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: ${{ fromJSON(needs.matrix.outputs.actions).python }}
+      - uses: $/.github/actions/setup-nox
+      - run: ${NOX_COMMAND}
+      - if: env.COVERAGE == 'true'
+        name: report coverage to summary
+        run: nox -s coverage-report

@@ -1,0 +1,68 @@
+name: Reusable nox session matrix workflow
+
+on:
+  workflow_call:
+    inputs:
+      session:
+        description: nox session that writes `nox_sessions` (a JSON list of nox sessions) to GITHUB_OUTPUT
+        required: true
+        type: string
+      crds_observatory:
+        required: false
+        type: string
+        default: none
+
+permissions: {}
+
+jobs:
+  sessions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: $/.github/actions/setup-nox
+      - id: sessions
+        run: nox -s "$SESSION"
+        env:
+          SESSION: ${{ inputs.session }}
+    outputs:
+      nox_sessions: ${{ steps.sessions.outputs.nox_sessions }}
+
+  crds:
+    runs-on: ubuntu-latest
+    if: inputs.crds_observatory != 'none'
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: $/.github/actions/setup-nox
+      - id: crds
+        run: nox -s crds-context -- "$CRDS_OBSERVATORY"
+        env:
+          CRDS_OBSERVATORY: ${{ inputs.crds_observatory }}
+    outputs:
+      context: ${{ steps.crds.outputs.context }}
+
+  nox:
+    needs:
+      - sessions
+      - crds
+    if: >-
+      !cancelled()
+      && needs.sessions.result == 'success'
+      && contains(fromJSON('["success", "skipped"]'), needs.crds.result)
+      && needs.sessions.outputs.nox_sessions != ''
+      && needs.sessions.outputs.nox_sessions != '[]'
+    strategy:
+      fail-fast: false
+      matrix:
+        session: ${{ fromJSON(needs.sessions.outputs.nox_sessions) }}
+    name: ${{ matrix.session }}
+    uses: $/.github/workflows/reusable-nox-test.yml
+    permissions:
+      contents: read
+    with:
+      session: ${{ matrix.session }}
+      crds_observatory: ${{ inputs.crds_observatory }}
+      crds_context: ${{ needs.crds.outputs.context }}

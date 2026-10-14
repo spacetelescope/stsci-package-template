@@ -5,10 +5,13 @@ from pathlib import Path
 
 import nox
 
+from stsci_package_template.crds import run_crds_context
 from stsci_package_template.dependencies import PythonSupport, run_update_spec0
 from stsci_package_template.pytest import (
     MatrixEntry,
     default_ci_matrix,
+    run_check_labels,
+    run_coverage_report,
     run_pytest,
     run_tagged_ci,
     run_tests,
@@ -70,6 +73,24 @@ def ci_tests(session: nox.Session, matrix_entry: MatrixEntry) -> None:
 def ci_sessions(session: nox.Session) -> None:
     """Run all CI sessions tagged with 'ci'."""
     run_tagged_ci(session, "ci")
+
+
+@nox.session(name="crds-context", python=None, default=False)
+def crds_context(session: nox.Session) -> None:
+    """Get the latest CRDS context: ``nox -s crds-context -- <observatory>``."""
+    run_crds_context(session)
+
+
+@nox.session(name="check-labels", python=None, default=False)
+def check_labels(session: nox.Session) -> None:
+    """Check a CI matrix entry's labels: ``nox -s check-labels -- <entry-json>``."""
+    run_check_labels(session)
+
+
+@nox.session(name="coverage-report", python=None, default=False)
+def coverage_report(session: nox.Session) -> None:
+    """Combine and report coverage data as markdown."""
+    run_coverage_report(session)
 
 
 @nox.session(python=None)
