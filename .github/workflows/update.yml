@@ -114,14 +114,6 @@ jobs:
           WORKFLOWS_UPDATED: ${{ needs.update-github-workflow-actions.outputs.updated }}
           PRE_COMMIT_UPDATED: ${{ needs.update-pre-commit.outputs.updated }}
         run: |
-          body="$RUNNER_TEMP/template-dependencies/pr-body.md"
-          : > "$body"
-          if [[ "$WORKFLOWS_UPDATED" == 'true' ]]; then
-            printf '%s\n' '[Pinact](https://github.com/suzuki-shunsuke/pinact) has detected updates to actions in templated GitHub workflows.' >> "$body"
-          fi
-          if [[ "$PRE_COMMIT_UPDATED" == 'true' ]]; then
-            printf '%s\n' '[pre-commit](https://pre-commit.com/) has detected updates to hook revisions in `templates/.pre-commit-config.yaml`.' >> "$body"
-          fi
           gh pr create --head="$BRANCH_NAME" \
-            --title='Update Dependencies Encoded In Templates' \
-            --body-file="$body"
+            --title='Update pinned tool versions in templated file(s)' \
+            --body='[Pinact](https://github.com/suzuki-shunsuke/pinact) and / or [pre-commit](https://pre-commit.com) found new released versions for tools encoded in templated files.'
