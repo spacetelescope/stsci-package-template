@@ -8,7 +8,6 @@ ROOT_DIRECTORY = Path(__file__).parent.parent
 
 COMMON_FILENAMES = [
     ".github/pull_request_template.md",
-    ".github/workflows/update.yml",
     ".gitignore",
     "LICENSE.txt",
     "README.md",
