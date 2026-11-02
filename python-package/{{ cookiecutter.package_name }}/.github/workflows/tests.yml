@@ -33,10 +33,10 @@ jobs:
   supported-pythons:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: "3"
       - run: pip install packaging tomli
@@ -114,22 +114,22 @@ jobs:
     steps:
 {%- if cookiecutter.crds_observatory != 'none' %}
       - name: cache CRDS reference files retrieved during testing
-        uses: actions/cache@v5
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ${{ "{{" }} env.CRDS_PATH {{ "}}" }}
           key: ${{ "{{" }} env.CRDS_CONTEXT {{ "}}" }}
 {%- endif %}
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 {%- if cookiecutter.task_runner == 'none' %}
-      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: ${{ "{{" }} matrix.python-version {{ "}}" }}
       - run: pip install ".[test]" ${{ "{{" }} matrix.coverage && 'coverage pytest-cov' || '' {{ "}}" }}
       - run: pytest ${{ "{{" }} matrix.coverage && '--cov' || '' {{ "}}" }}
 {%- elif cookiecutter.task_runner == 'nox' %}
-      - uses: wntrblm/nox@5a277b752f6094150e25237d47c34168e2b7526e # 2026.02.09
+      - uses: wntrblm/nox@afa3983bbac3143bab5c8406244327581f76a3d7 # 2026.10.20
         with:
           python-versions: ${{ "{{" }} matrix.python-version {{ "}}" }}
       - run: nox -s "test${{ "{{" }} matrix.coverage && '-with-coverage' || '' {{ "}}" }}"
@@ -141,7 +141,7 @@ jobs:
           echo '## Coverage Report' >> $GITHUB_STEP_SUMMARY
           coverage report -i -m --format=markdown | tee -a $GITHUB_STEP_SUMMARY
 {%- elif cookiecutter.task_runner == 'tox' %}
-    uses: OpenAstronomy/github-actions-workflows/.github/workflows/tox.yml@e5af21e4ae37af089a73bb032e10b78b0e746174 # v3.0.1
+    uses: OpenAstronomy/github-actions-workflows/.github/workflows/tox.yml@1285b95e32c783cfa40eb2ffbd6ca4cd023fb884 # v3.2.2
     with:
 {%- if cookiecutter.crds_observatory != 'none' %}
       setenv: |
