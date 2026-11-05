@@ -1,1 +1,1 @@
-../../templates/LICENSE.txt
+../../LICENSE.txt
