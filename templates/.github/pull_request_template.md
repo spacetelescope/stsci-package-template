@@ -1,3 +1,5 @@
+## Description
+
 <!-- If this PR addresses a JIRA ticket: -->
 <!-- Resolves [JP-nnnn](https://jira.stsci.edu/browse/JP-nnnn) -->
 
@@ -6,13 +8,14 @@
 
 <!-- Describe your changes here: -->
 
-## Description
+## Generative AI Usage Disclosure
 
-This change ...
-
-<!-- If you can't perform these tasks due to permissions, reach out to a maintainer. -->
+<!-- If generative AI or LLMs were used in the process of making this change, describe their use here. -->
+<!-- Otherwise, indicate "No genAI tools used". -->
 
 ## Tasks
+
+<!-- If you can't perform these tasks due to permissions, reach out to a maintainer. -->
 
 - [ ] update or add relevant tests
 - [ ] update relevant docstrings and / or `docs/` page
@@ -20,8 +23,3 @@ This change ...
 - [ ] If this change affects user-facing code or public API, add news fragment file(s) to `changes/` (see [the changelog instructions]({{ cookiecutter.repository_url }}/blob/main/changes/README.md)).
       Otherwise, add the `no-changelog-entry-needed` label.
 {%- endif %}
-
-## Generative AI Usage Disclosure
-
-<!-- If generative AI or LLMs were used in the process of making this change, describe their use here. -->
-<!-- Otherwise, indicate "No genAI tools used". -->
