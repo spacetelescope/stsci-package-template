@@ -1,3 +1,4 @@
+{%- raw -%}
 name: changelog
 
 on:
@@ -10,14 +11,14 @@ on:
       - reopened
 
 concurrency:
-  group: ${{ "{{" }} github.workflow {{ "}}" }}-${{ "{{" }} github.event.pull_request.number || github.ref {{ "}}" }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 permissions: {}
 
 jobs:
   check:
-    if: ${{ "{{" }} !contains(github.event.pull_request.labels.*.name, 'no-changelog-entry-needed') {{ "}}" }}
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'no-changelog-entry-needed') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -29,4 +30,5 @@ jobs:
       - run: pip install . towncrier
       - run: towncrier check
       - name: search for news fragment matching pull request number
-        run: towncrier build --draft | grep -P '#${{ "{{" }} github.event.number {{ "}}" }}'
+        run: towncrier build --draft | grep -P '#${{ github.event.number }}'
+{%- endraw %}
