@@ -27,13 +27,8 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          fetch-tags: true
           fetch-depth: 0
           persist-credentials: false
-      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
-        with:
-          python-version: "3"
-      - run: pip install build
 {%- if cookiecutter.python_c_extensions %}
       - if: ${{ "{{" }} runner.os == 'Linux' {{ "}}" }}
         uses: docker/setup-qemu-action@99012661954931238ded8c8b007157a8430204e1 # v4.4.0
@@ -43,15 +38,38 @@ jobs:
         with:
           package-dir: ./
           output-dir: dist/
+{%- else %}
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3"
+      - run: pip install build
+      - run: python -m build --sdist --wheel
 {%- endif %}
-      - run: python -m build --sdist{%- if not cookiecutter.python_c_extensions %} --wheel{%- endif %}
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: dist{%- if cookiecutter.python_c_extensions -%}-${{ "{{" }} runner.os {{ "}}" }}-${{ "{{" }} runner.arch {{ "}}" }}{%- endif %}
           path: ./dist/
+{%- if cookiecutter.python_c_extensions %}
+  sdist:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3"
+      - run: pip install build
+      - run: python -m build --sdist
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: dist-src
+          path: ./dist/
+{%- endif %}
   publish:
     if: (github.event_name == 'release') && (github.event.action == 'released')
-    needs: [build]
+    needs: [build{%- if cookiecutter.python_c_extensions %}, sdist{% endif %}]
     runs-on: ubuntu-latest
     permissions:
       id-token: write
