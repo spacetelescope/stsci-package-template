@@ -15,6 +15,7 @@ spacetelescope/stdatamodels
 spacetelescope/stpipe
 spacetelescope/stpreview
 spacetelescope/stsci-nox
+spacetelescope/stsci.imagestats
 spacetelescope/stsci.stimage
 spacetelescope/stwcs
 spacetelescope/tweakwcs
